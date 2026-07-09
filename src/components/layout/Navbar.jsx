@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { motion, AnimatePresence } from "motion/react"
 import { ChevronDown, Menu } from "lucide-react"
 
@@ -6,9 +7,9 @@ const NAV_LINKS = ["Scooters", "Motorcycles", "Energy Solutions"]
 
 function Logo() {
   return (
-    <a href="#" className="select-none text-xl font-extrabold tracking-[0.18em] text-white">
+    <Link to="/" className="select-none text-xl font-extrabold tracking-[0.18em] text-white">
       VENU<span className="font-medium text-white/70"> MOTORS</span>
-    </a>
+    </Link>
   )
 }
 

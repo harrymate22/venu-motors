@@ -42,10 +42,9 @@ export default function AboutSection() {
         <motion.div
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.1 }}
-          className="overflow-hidden rounded-2xl shadow-sm"
         >
           <img
-            src="/Home-page/hero_banner2.png"
+            src="/Home-page/aboutus.png"
             alt="Venu Motors electric scooters"
             className="aspect-[4/3] w-full object-cover"
           />

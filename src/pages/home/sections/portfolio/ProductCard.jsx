@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function ProductCard({ product }) {
-  const { model, variant, tagline, price, specs, accent, image } = product
+  const { model, variant, tagline, price, specs, accent, image, slug } = product
   const shortName = model.replace(/^Venu\s/, "") // "Thunder"
 
   return (
@@ -46,9 +47,11 @@ export default function ProductCard({ product }) {
 
         {/* Actions pinned to the bottom for equal-height cards */}
         <div className="mt-auto flex flex-col gap-3 pt-6">
-          <Button className="group/btn h-11 w-full gap-2">
-            Explore {shortName}
-            <ArrowRight className="size-4 transition-transform group-hover/btn:translate-x-0.5" />
+          <Button asChild className="group/btn h-11 w-full gap-2">
+            <Link to={`/${slug}`}>
+              Explore {shortName}
+              <ArrowRight className="size-4 transition-transform group-hover/btn:translate-x-0.5" />
+            </Link>
           </Button>
           <Button variant="outline" className="group/btn h-11 w-full gap-2">
             Buy Now

@@ -24,7 +24,7 @@ export default function LeadFormSection() {
   return (
     <section className="bg-[#F3F7F9] py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="grid overflow-hidden rounded-3xl bg-white shadow-sm lg:grid-cols-2">
+        <div className="grid overflow-hidden rounded-3xl bg-white shadow-sm lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)]">
           {/* Form */}
           <div className="p-8 md:p-12">
             <h2 className="text-3xl font-bold leading-tight tracking-tight text-neutral-900 md:text-4xl">
@@ -114,11 +114,11 @@ export default function LeadFormSection() {
           </div>
 
           {/* Image */}
-          <div className="relative hidden bg-neutral-100 lg:block">
+          <div className="relative hidden bg-white lg:block">
             <img
-              src="/Home-page/red_thunder_scooty.png"
+              src="/Home-page/connectwithus.png"
               alt="Venu Thunder"
-              className="absolute inset-0 size-full object-cover"
+              className="absolute inset-0 size-full origin-top scale-[1.4] object-contain object-center"
             />
           </div>
         </div>

@@ -20,6 +20,7 @@ export const PRODUCTS = [
   {
     id: "thunder-red",
     model: "Venu Thunder",
+    slug: "thunder",
     variant: "Red",
     tagline: "Bold looks, effortless everyday ride",
     price: "₹53,000",
@@ -30,6 +31,7 @@ export const PRODUCTS = [
   {
     id: "thunder-blue",
     model: "Venu Thunder",
+    slug: "thunder",
     variant: "Blue",
     tagline: "Built for Indian roads",
     price: "₹53,000",
@@ -40,6 +42,7 @@ export const PRODUCTS = [
   {
     id: "thunder-grey",
     model: "Venu Thunder",
+    slug: "thunder",
     variant: "Grey",
     tagline: "Ride green, every single day",
     price: "₹53,000",
