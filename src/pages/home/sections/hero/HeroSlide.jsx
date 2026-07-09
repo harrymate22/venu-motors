@@ -26,7 +26,7 @@ export default function HeroSlide({ slide, active }) {
   const isLeft = align === "left"
 
   return (
-    <div className="relative h-svh min-h-[640px] w-full overflow-hidden">
+    <div className="relative h-svh min-h-[922px] w-full overflow-hidden">
       <img src={image} alt={alt} className="absolute inset-0 size-full object-cover" />
 
       {/* Legibility overlay — biased to the text side */}

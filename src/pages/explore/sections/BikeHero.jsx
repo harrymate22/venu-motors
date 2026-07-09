@@ -11,7 +11,7 @@ export default function BikeHero({ bike }) {
   const { name, eyebrow, tagline, price, image, heroStats, specNote } = bike
 
   return (
-    <section className="relative h-svh min-h-[640px] w-full overflow-hidden bg-neutral-950">
+    <section className="relative h-svh min-h-[922px] w-full overflow-hidden bg-neutral-950">
       <img src={image} alt={name} className="absolute inset-0 size-full object-cover" />
       {/* Legibility — darker on the left (text) and along the bottom (stats) */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/25 to-transparent" />
