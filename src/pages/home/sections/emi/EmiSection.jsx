@@ -36,7 +36,7 @@ export default function EmiSection() {
           </Button>
         </motion.div>
 
-        {/* Right — elevated stats card */}
+      
         <motion.div
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.1 }}
