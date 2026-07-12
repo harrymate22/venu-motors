@@ -46,10 +46,11 @@ export const BIKES = {
       "9–10 hrs charging time",
     ],
 
+    // `bg` = configurator stage image for that colour (falls back to Red's shot).
     colours: [
-      { name: "Red", hex: "#D42A2A" },
+      { name: "Red", hex: "#D42A2A", bg: "/explore-pages/thunder_purchase_bg.png" },
       { name: "Grey", hex: "#9AA0A6" },
-      { name: "Blue", hex: "#2F5FE0" },
+      { name: "Blue", hex: "#2F5FE0", bg: "/explore-pages/thunder_blue_bg.png" },
       { name: "Green", hex: "#3FA34D" },
       { name: "White", hex: "#FFFFFF" },
     ],
@@ -124,8 +125,49 @@ export const BIKES = {
       { value: "1 yr", label: "Battery warranty" },
     ],
 
+    // Booking / configurator page (/thunder/book). Colours reuse `variants`.
+    booking: {
+      bookingAmount: "₹999",
+      emi: "₹1,499/mo",
+      range: "100 km",
+      benefitsNote: "No registration or licence needed — ride completely hassle-free.",
+    },
+
+    // "Peace of mind" service section — heading + three image/link cards.
+    // Swap the placeholder `image` paths for real service photos when ready.
+    service: {
+      heading: ["You ride.", "We take care of the rest."],
+      subtitle:
+        "Doorstep service, effortless insurance and a warranty that goes the distance — so every kilometre stays worry-free.",
+      cards: [
+        {
+          image: "/explore-pages/thunder_disc.png",
+          title: "Doorstep service",
+          desc: "Pickup, service and drop — sorted right from your home. Faster, easier, hassle-free.",
+          linkLabel: "Book a service",
+          href: "#",
+        },
+        {
+          image: "/explore-pages/scooter_insurance.png",
+          title: "Insurance, made simple",
+          desc: "Comprehensive cover that's as smooth as your ride, sorted in minutes.",
+          linkLabel: "Get insured",
+          href: "#",
+        },
+        {
+          image: "/explore-pages/thunder_warranty.png",
+          title: "Warranty that lasts",
+          desc: "Extended cover up to 1.25 lakh km across battery and motor. Ride assured.",
+          linkLabel: "Explore warranty plans",
+          href: "#",
+        },
+      ],
+    },
+
     // Sticky-tab bento section (Performance / Design / Technology).
-    // `icon` is a lucide name resolved in BikeFeatures; `span` shapes the bento.
+    // `icon` is a lucide name resolved in BikeFeatures. Each tab has 6 cards laid
+    // out in a fixed woven mosaic; cards 1/3/5 are the tall slots (give them an
+    // `image` for a photo card, or a `tint`: cream | sky | mint | rose).
     featureTabs: [
       {
         id: "performance",
@@ -133,12 +175,12 @@ export const BIKES = {
         title: "Performance",
         subtitle: "Ready. Set. Ride.",
         cards: [
-          { icon: "Gauge", title: "Up to 100 km", subtitle: "Go the distance on a single charge", span: "big" },
-          { icon: "Zap", title: "3 ride modes", subtitle: "Speed modes 1, 2 & 3" },
-          { icon: "BatteryCharging", title: "Graphene battery", subtitle: "Fast, durable and reliable" },
-          { icon: "Timer", title: "9–10 hrs charging", subtitle: "Charge at home overnight", span: "wide" },
-          { icon: "Disc", title: "Disc + drum brakes", subtitle: "Confident stopping power" },
-          { icon: "RotateCcw", title: "Reverse mode", subtitle: "Effortless parking, every time" },
+          { icon: "Gauge", title: "Up to 100 km", subtitle: "Go the distance on a single charge", image: "/explore-pages/thunder_performance_category.png" },
+          { icon: "Zap", title: "3 ride modes", subtitle: "Speed modes 1, 2 & 3", tint: "rose" },
+          { icon: "BatteryCharging", title: "Graphene battery", subtitle: "Fast, durable and reliable", image: "/explore-pages/thunder_battery.png" },
+          { icon: "Timer", title: "9–10 hrs charging", subtitle: "Charge at home overnight", tint: "cream" },
+          { icon: "Disc", title: "Disc + drum brakes", subtitle: "Confident stopping power", image: "/explore-pages/thunder_disc.png" },
+          { icon: "RotateCcw", title: "Reverse mode", subtitle: "Effortless parking, every time", tint: "cream" },
         ],
       },
       {
@@ -147,12 +189,12 @@ export const BIKES = {
         title: "Design",
         subtitle: "Made to turn heads.",
         cards: [
-          { icon: "Palette", title: "5 bold colours", subtitle: "Red, Grey, Blue, Green & White", span: "big" },
-          { icon: "Lightbulb", title: "LED headlight", subtitle: "See and be seen" },
-          { icon: "Gauge", title: "Digital speedometer", subtitle: "Ride data at a glance" },
-          { icon: "CircleDot", title: "Tubeless tyres", subtitle: "90-90-10, worry-free", span: "wide" },
-          { icon: "Armchair", title: "Comfort seat", subtitle: "Ergonomic for long rides" },
-          { icon: "Sparkles", title: "Bold graphics", subtitle: "Head-turning Thunder styling" },
+          { icon: "Palette", title: "5 bold colours", subtitle: "Red, Grey, Blue, Green & White", image: "/explore-pages/thunder_bike.png" },
+          { icon: "Lightbulb", title: "LED headlight", subtitle: "See and be seen", tint: "rose" },
+          { icon: "Gauge", title: "Digital speedometer", subtitle: "Ride data at a glance", tint: "sky" },
+          { icon: "CircleDot", title: "Tubeless tyres", subtitle: "90-90-10, worry-free", tint: "cream" },
+          { icon: "Armchair", title: "Comfort seat", subtitle: "Ergonomic for long rides", image: "/explore-pages/thunder_sit.png" },
+          { icon: "Sparkles", title: "Bold graphics", subtitle: "Head-turning Thunder styling", tint: "cream" },
         ],
       },
       {
@@ -161,12 +203,12 @@ export const BIKES = {
         title: "Technology",
         subtitle: "Smarts that redefine your ride.",
         cards: [
-          { icon: "KeyRound", title: "Keyless entry", subtitle: "Walk up and go", span: "big" },
-          { icon: "ShieldCheck", title: "Anti-theft + central lock", subtitle: "Total peace of mind" },
-          { icon: "Usb", title: "USB charging port", subtitle: "Power your phone on the go" },
-          { icon: "Navigation", title: "Cruise mode", subtitle: "Effortless steady cruising", span: "wide" },
-          { icon: "FileCheck", title: "No registration or licence", subtitle: "Ride completely hassle-free" },
-          { icon: "PlugZap", title: "Portable charger", subtitle: "Charge anywhere, anytime" },
+          { icon: "KeyRound", title: "Keyless entry", subtitle: "Walk up and go", image: "/explore-pages/thunder_bike.png" },
+          { icon: "ShieldCheck", title: "Anti-theft + central lock", subtitle: "Total peace of mind", tint: "rose" },
+          { icon: "Usb", title: "USB charging port", subtitle: "Power your phone on the go", tint: "sky" },
+          { icon: "Navigation", title: "Cruise mode", subtitle: "Effortless steady cruising", tint: "cream" },
+          { icon: "FileCheck", title: "No registration or licence", subtitle: "Ride completely hassle-free", tint: "mint" },
+          { icon: "PlugZap", title: "Portable charger", subtitle: "Charge anywhere, anytime", tint: "cream" },
         ],
       },
     ],

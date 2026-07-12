@@ -4,6 +4,8 @@ import BikeHero from "./sections/BikeHero"
 import BikeShowcase from "./sections/BikeShowcase"
 import BikeColours from "./sections/BikeColours"
 import BikeFeatures from "./sections/BikeFeatures"
+import BikeService from "./sections/BikeService"
+import TestimonialsSection from "@/pages/home/sections/testimonials/TestimonialsSection"
 
 export default function BikePage() {
   const { slug } = useParams()
@@ -18,6 +20,8 @@ export default function BikePage() {
       <BikeShowcase showcase={bike.showcase} />
       <BikeColours bike={bike} />
       <BikeFeatures tabs={bike.featureTabs} />
+      <BikeService service={bike.service} />
+      <TestimonialsSection />
       {/* Coming next: specs, key features, warranty */}
     </main>
   )

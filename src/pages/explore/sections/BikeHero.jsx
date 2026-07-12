@@ -1,4 +1,5 @@
 import { motion } from "motion/react"
+import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
 
 const rise = (delay = 0) => ({
@@ -43,10 +44,13 @@ export default function BikeHero({ bike }) {
         </motion.p>
 
         <motion.div {...rise(0.28)} className="mt-8 flex flex-wrap items-center gap-4">
-          <button className="group flex h-14 w-52 items-center justify-center gap-2 rounded-sm bg-white text-lg font-medium text-[#181E22] transition-colors hover:bg-white/90">
+          <Link
+            to={`/${bike.slug}/book`}
+            className="group flex h-14 w-52 items-center justify-center gap-2 rounded-sm bg-white text-lg font-medium text-[#181E22] transition-colors hover:bg-white/90"
+          >
             Buy Now
             <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
-          </button>
+          </Link>
           <button className="group flex h-14 w-52 items-center justify-center gap-2 rounded-sm bg-white/10 text-lg font-medium text-white ring-1 ring-white/25 backdrop-blur-sm transition-colors hover:bg-white/20">
             Book a Test Ride
             <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
