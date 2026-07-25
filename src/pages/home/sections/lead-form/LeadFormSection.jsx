@@ -22,7 +22,7 @@ export default function LeadFormSection() {
   }
 
   return (
-    <section className="bg-[#F3F7F9] py-16 md:py-24">
+    <section id="enquire" className="scroll-mt-20 bg-[#F3F7F9] py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid overflow-hidden rounded-3xl bg-white shadow-sm lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)]">
           {/* Form */}

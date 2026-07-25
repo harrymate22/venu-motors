@@ -10,7 +10,7 @@ const fadeUp = {
 
 export default function AboutSection() {
   return (
-    <section className="bg-[#F8FBFF] py-16 text-neutral-800 md:py-24">
+    <section id="about" className="scroll-mt-20 bg-[#F8FBFF] py-16 text-neutral-800 md:py-24">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2 lg:gap-16">
         {/* Copy */}
         <motion.div {...fadeUp}>

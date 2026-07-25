@@ -28,7 +28,7 @@ function PostCard({ post }) {
 
 export default function BlogSection() {
   return (
-    <section className="bg-[#F3F7F9] py-16 md:py-24">
+    <section id="news" className="scroll-mt-20 bg-[#F3F7F9] py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <Carousel opts={{ align: "start" }}>
           {/* Header */}

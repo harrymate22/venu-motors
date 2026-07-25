@@ -122,10 +122,22 @@
 
   /* Hide scrollbars for a clean, modern feel — scrolling still works */
   html {
+    scroll-behavior: smooth; /* in-page anchors, e.g. #enquire */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* legacy Edge/IE */
   }
   html::-webkit-scrollbar {
+    display: none; /* Chromium, Safari */
+  }
+}
+
+@layer utilities {
+  /* Scrollable rows that shouldn't show a bar — e.g. the model switcher on phones */
+  .no-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* legacy Edge/IE */
+  }
+  .no-scrollbar::-webkit-scrollbar {
     display: none; /* Chromium, Safari */
   }
 }

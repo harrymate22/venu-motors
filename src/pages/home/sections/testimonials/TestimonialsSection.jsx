@@ -16,7 +16,7 @@ export default function TestimonialsSection() {
   const [active, setActive] = useState(null)
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section id="stories" className="scroll-mt-20 bg-white py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <Carousel
           opts={{ align: "start", loop: true }}
