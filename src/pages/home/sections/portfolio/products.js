@@ -71,13 +71,14 @@ function colourCards({ modelId, model, shortName, colours, fallbackImage }) {
   return colours.map(({ id, name, tagline, image }) => ({
     id: `${modelId}-${id}`,
     model,
+    // Every model now has its own page; `modelId` doubles as the route slug.
+    slug: modelId,
     variant: name,
     accent: ACCENTS[id],
     tagline,
     image: image ?? fallbackImage,
-    // No bike page for these models yet — CTA goes to the home enquiry form.
-    href: "#enquire",
-    ctaLabel: `Enquire about ${ctaName}`,
+    ctaLabel: `Explore ${ctaName}`,
+    // No published price on these sheets, so the second action stays an enquiry.
     secondaryLabel: "Book a test ride",
     priceLabel: "Price on request",
     specs: ["Up to 100 km range", "9–10 hr full charge"],

@@ -16,7 +16,7 @@ const arrowClass =
   "static size-10 translate-y-0 rounded-full border-0 bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-md transition-all hover:bg-white hover:text-neutral-900 hover:ring-transparent disabled:opacity-40"
 
 function VariantCard({ bike, variant }) {
-  const { name, price, variantSpecs } = bike
+  const { name, slug, price, priceLabel, variantSpecs } = bike
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-2xl bg-white text-neutral-900 shadow-xl">
@@ -55,20 +55,29 @@ function VariantCard({ bike, variant }) {
           ))}
         </ul>
 
+        {/* Models with no published price show the label and route to enquiry */}
         <div className="mt-auto pt-6">
-          <p className="text-xs uppercase tracking-wide text-neutral-400">Starting at</p>
-          <p className="text-xl font-semibold text-neutral-900">
-            {price}
-            <span className="text-sm font-normal text-neutral-500"> onwards</span>
-          </p>
+          {price ? (
+            <>
+              <p className="text-xs uppercase tracking-wide text-neutral-400">Starting at</p>
+              <p className="text-xl font-semibold text-neutral-900">
+                {price}
+                <span className="text-sm font-normal text-neutral-500"> onwards</span>
+              </p>
+            </>
+          ) : (
+            <p className="text-xl font-semibold text-neutral-900">{priceLabel}</p>
+          )}
 
           <div className="mt-4 flex gap-3">
-            <Button className="group/btn h-11 flex-1 gap-2">
-              Order now
-              <ArrowRight className="size-4 transition-transform group-hover/btn:translate-x-0.5" />
+            <Button asChild className="group/btn h-11 flex-1 gap-2">
+              <Link to={price ? `/${slug}/book` : "/#enquire"}>
+                {price ? "Order now" : "Enquire"}
+                <ArrowRight className="size-4 transition-transform group-hover/btn:translate-x-0.5" />
+              </Link>
             </Button>
             <Button asChild variant="outline" className="h-11 flex-1">
-              <Link to="/thunder">Explore</Link>
+              <Link to={`/${slug}`}>Explore</Link>
             </Button>
           </div>
         </div>
@@ -112,7 +121,7 @@ export default function BikeColours({ bike }) {
           <div className="flex items-end justify-between gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-                Choose your Thunder
+                Choose your {bike.shortName ?? bike.name}
               </h2>
               <p className="mt-3 max-w-xl text-white/60">
                 Same effortless ride, five bold finishes. Pick the colour that's you.

@@ -7,6 +7,7 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel"
 import { carouselArrowClass } from "@/lib/carousel"
+import { cn } from "@/lib/utils"
 import { POSTS } from "./posts"
 
 function PostCard({ post }) {
@@ -26,9 +27,10 @@ function PostCard({ post }) {
   )
 }
 
-export default function BlogSection() {
+/** `className` lets a host page restyle the band — the About page runs it white. */
+export default function BlogSection({ className }) {
   return (
-    <section id="news" className="scroll-mt-20 bg-[#F3F7F9] py-16 md:py-24">
+    <section id="news" className={cn("scroll-mt-20 bg-[#F3F7F9] py-16 md:py-24", className)}>
       <div className="mx-auto max-w-7xl px-6">
         <Carousel opts={{ align: "start" }}>
           {/* Header */}

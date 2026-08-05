@@ -9,7 +9,12 @@ const rise = (delay = 0) => ({
 })
 
 export default function BikeHero({ bike }) {
-  const { name, eyebrow, tagline, price, image, heroStats, specNote } = bike
+  const { name, eyebrow, tagline, price, priceLabel, image, heroStats, specNote } = bike
+
+  // No published price yet → send buyers to the enquiry form instead of the
+  // configurator, which has no figure to build a booking around.
+  const buyTo = price ? `/${bike.slug}/book` : "/#enquire"
+  const buyLabel = price ? "Buy Now" : "Enquire now"
 
   return (
     <section className="relative h-svh min-h-[922px] w-full overflow-hidden bg-neutral-950">
@@ -39,16 +44,22 @@ export default function BikeHero({ bike }) {
           {tagline}
         </motion.p>
         <motion.p {...rise(0.2)} className="mt-4 text-lg text-white/90">
-          Starting at <span className="text-2xl font-semibold">{price}</span>
-          <span className="text-sm text-white/60"> on-road</span>
+          {price ? (
+            <>
+              Starting at <span className="text-2xl font-semibold">{price}</span>
+              <span className="text-sm text-white/60"> on-road</span>
+            </>
+          ) : (
+            <span className="text-2xl font-semibold">{priceLabel}</span>
+          )}
         </motion.p>
 
         <motion.div {...rise(0.28)} className="mt-8 flex flex-wrap items-center gap-4">
           <Link
-            to={`/${bike.slug}/book`}
+            to={buyTo}
             className="group flex h-14 w-52 items-center justify-center gap-2 rounded-sm bg-white text-lg font-medium text-[#181E22] transition-colors hover:bg-white/90"
           >
-            Buy Now
+            {buyLabel}
             <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
           </Link>
           <button className="group flex h-14 w-52 items-center justify-center gap-2 rounded-sm bg-white/10 text-lg font-medium text-white ring-1 ring-white/25 backdrop-blur-sm transition-colors hover:bg-white/20">

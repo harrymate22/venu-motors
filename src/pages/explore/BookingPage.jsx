@@ -125,6 +125,8 @@ export default function BookingPage() {
   const [cityOpen, setCityOpen] = useState(false)
 
   if (!bike) return <Navigate to="/" replace />
+  // No published price → nothing to configure a booking against yet.
+  if (!bike.price) return <Navigate to={`/${slug}`} replace />
 
   const { name, price, booking, colours } = bike
   const colour = colours.find((c) => c.name === colourName) ?? colours[0]

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Layout from "@/components/layout/Layout"
 import HomePage from "@/pages/home/HomePage"
+import AboutPage from "@/pages/about/AboutPage"
 import BikePage from "@/pages/explore/BikePage"
 import BookingPage from "@/pages/explore/BookingPage"
 
@@ -10,6 +11,8 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />
+          <Route path="about-us" element={<AboutPage />} />
+          {/* Catch-all bike slug — keep last so static routes win */}
           <Route path=":slug" element={<BikePage />} />
         </Route>
         {/* Standalone booking/configurator — no site nav/footer */}
