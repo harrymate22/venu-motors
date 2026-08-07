@@ -69,6 +69,12 @@ export default function Navbar() {
 
               <div className="flex items-center gap-8">
                 <Link
+                  to="/dealership"
+                  className="hidden text-sm font-medium text-white/90 transition-colors hover:text-white lg:inline"
+                >
+                  Dealership
+                </Link>
+                <Link
                   to="/#enquire"
                   className="hidden text-sm font-medium text-white/90 transition-colors hover:text-white lg:inline"
                 >
