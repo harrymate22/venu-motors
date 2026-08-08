@@ -12,6 +12,7 @@ import RouteFallback from "@/components/layout/RouteFallback"
 const HomePage = lazy(() => import("@/pages/home/HomePage"))
 const AboutPage = lazy(() => import("@/pages/about/AboutPage"))
 const DealershipPage = lazy(() => import("@/pages/dealership/DealershipPage"))
+const SavingsPage = lazy(() => import("@/pages/savings/SavingsPage"))
 const BikePage = lazy(() => import("@/pages/explore/BikePage"))
 const BookingPage = lazy(() => import("@/pages/explore/BookingPage"))
 
@@ -26,7 +27,16 @@ function App() {
           {/* Catch-all bike slug — keep last so static routes win */}
           <Route path=":slug" element={<BikePage />} />
         </Route>
-        {/* Standalone booking/configurator — no site nav/footer */}
+        {/* Standalone full-screen tools — no site nav/footer, locked to the
+            viewport with their own internal scroll region */}
+        <Route
+          path="savings"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <SavingsPage />
+            </Suspense>
+          }
+        />
         <Route
           path=":slug/book"
           element={
