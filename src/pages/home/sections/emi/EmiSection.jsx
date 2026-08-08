@@ -1,4 +1,5 @@
 import { motion } from "motion/react"
+import { Link } from "react-router-dom"
 import { ArrowRight, CalendarClock, Percent, Wallet, ReceiptText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -30,9 +31,14 @@ export default function EmiSection() {
             Use our EMI calculator to estimate your monthly payments and find the
             Venu Thunder that fits your budget.
           </p>
-          <Button className="mt-8 h-12 gap-2 bg-neutral-900 px-8 text-base hover:bg-neutral-800">
-            Calculate your EMI
-            <ArrowRight className="size-5" />
+          <Button
+            asChild
+            className="group mt-8 h-12 gap-2 bg-neutral-900 px-8 text-base hover:bg-neutral-800"
+          >
+            <Link to="/savings">
+              Calculate your EMI
+              <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+            </Link>
           </Button>
         </motion.div>
 
