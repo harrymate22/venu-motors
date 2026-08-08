@@ -1,7 +1,8 @@
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import { Outlet, useLocation } from "react-router-dom"
 import Navbar from "./Navbar"
 import Footer from "./Footer"
+import RouteFallback from "./RouteFallback"
 
 /**
  * Scroll management for client-side routing — the browser only does this for
@@ -41,7 +42,10 @@ export default function Layout() {
     <>
       <ScrollManager />
       <Navbar />
-      <Outlet />
+      {/* Nav and footer stay mounted while the route's chunk downloads */}
+      <Suspense fallback={<RouteFallback />}>
+        <Outlet />
+      </Suspense>
       <Footer />
     </>
   )
