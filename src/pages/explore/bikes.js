@@ -2,15 +2,52 @@
  * Bike catalogue — keyed by URL slug (e.g. /thunder).
  * Add a new bike here and it gets its own page automatically.
  *
- * Thunder's specs come from its own spec sheet. Icon, E-Fly, Wenu and Spot come
- * from sheets that all carry identical figures — 100 km per charge, 9–10 hr
- * charge, graphene battery, 80 kg, and the same five finishes — so they're built
- * by `sharedSpecBike()` rather than repeated four times. None of those sheets
- * lists a price, hence `priceLabel` instead of `price` (see PRICE-LESS below).
+ * PRICES AND RANGE come from the sales team's current list (Aug 2026), which
+ * supersedes the older spec sheets:
+ *
+ *   Thunder  60V 32Ah              ₹45,000            60 km
+ *   E-Fly    60V 42Ah              ₹59,000            80 km
+ *   Icon     60V 42Ah              ₹60,000            80 km
+ *   Spot     48V 32Ah / 60V 32Ah   ₹35,000 / ₹38,000  60 km
+ *
+ * Spot's range wasn't on that list; it shares Thunder's 60V 32Ah pack, so it
+ * carries Thunder's 60 km. Wenu wasn't on the list at all — it stays on
+ * `priceLabel` and, since the old 100 km sheet figure is no longer trusted
+ * anywhere else in the range, quotes no range at all until its numbers land.
  *
  * @typedef {Object} Stat   { value, label }
  * @typedef {Object} SpecRow { label, value }
  */
+
+/** ₹45,000 — Indian digit grouping. */
+const inr = (value) => `₹${value.toLocaleString("en-IN")}`
+
+/**
+ * Indicative EMI at the finance terms advertised on the home page (6.99% p.a.
+ * over 60 months — see EmiSection). Derived from the price rather than typed by
+ * hand, so a price change can't leave a stale monthly figure behind.
+ */
+const EMI_RATE = 0.0699 / 12
+const EMI_MONTHS = 60
+
+function monthlyEmi(price) {
+  const growth = (1 + EMI_RATE) ** EMI_MONTHS
+  const emi = (price * EMI_RATE * growth) / (growth - 1)
+  return `${inr(Math.round(emi / 10) * 10)}/mo`
+}
+
+/** Charging time is common to the whole range. */
+export const CHARGE_TIME = "9–10 hrs"
+
+/**
+ * Battery packs are stored as volts + amp-hours rather than a display string,
+ * so the label ("60V 32Ah") and the pack energy in kWh both derive from one
+ * number each. The savings calculator uses `packKwh` to cost a full charge.
+ *
+ * @typedef {Object} Pack { volts, ah, price? }
+ */
+const packLabel = ({ volts, ah }) => `${volts}V ${ah}Ah`
+export const packKwh = ({ volts, ah }) => (volts * ah) / 1000
 
 /** Label colour for a variant name — the text, not the paint. */
 const VARIANT_ACCENTS = {
@@ -30,29 +67,43 @@ const FINISHES = [
   { name: "White", hex: "#FFFFFF" },
 ]
 
-/** Figures every non-Thunder sheet repeats verbatim. */
-const SHARED_HERO_STATS = [
-  { value: "100 km", label: "Range / charge" },
-  { value: "9–10 hrs", label: "Charging time" },
-  { value: "0", label: "Emissions" },
-]
+/**
+ * Hero stats. Slot one is the range where we have one and the battery pack
+ * where we don't, so the row never renders a hole (or a range we can't stand
+ * behind) — see the Wenu note at the top.
+ */
+function heroStats({ rangeKm, battery }) {
+  return [
+    rangeKm
+      ? { value: `${rangeKm} km`, label: "Range / charge" }
+      : { value: battery, label: "Battery" },
+    { value: CHARGE_TIME, label: "Charging time" },
+    { value: "0", label: "Emissions" },
+  ]
+}
 
-const SHARED_HIGHLIGHTS = [
-  "100% eco-friendly vehicle",
-  "Charge at home",
-  "Up to 100 km on a single charge",
-  "Made for Indian conditions",
-  "Graphene battery",
-  "9–10 hrs charging time",
-]
+function highlightList(rangeKm) {
+  return [
+    "100% eco-friendly vehicle",
+    "Charge at home",
+    ...(rangeKm ? [`Up to ${rangeKm} km on a single charge`] : []),
+    "Made for Indian conditions",
+    "Graphene battery",
+    `${CHARGE_TIME} charging time`,
+  ]
+}
 
-const SHARED_VARIANT_SPECS = {
-  columns: [
-    { value: "100 km", label: "Range / charge" },
-    { value: "9–10 hrs", label: "Charging time" },
-    { value: "80 kg", label: "Kerb weight" },
-  ],
-  bullets: ["Keyless entry & anti-theft", "Reverse & cruise mode"],
+function variantSpecs(rangeKm, battery) {
+  return {
+    columns: [
+      rangeKm
+        ? { value: `${rangeKm} km`, label: "Range / charge" }
+        : { value: battery, label: "Battery" },
+      { value: CHARGE_TIME, label: "Charging time" },
+      { value: "80 kg", label: "Kerb weight" },
+    ],
+    bullets: ["Keyless entry & anti-theft", "Reverse & cruise mode"],
+  }
 }
 
 const SHARED_KEY_FEATURES = [
@@ -106,14 +157,28 @@ function sharedService(pick) {
 }
 
 /**
+ * The battery bento card. A single pack fits in the title; two (Spot) would
+ * overflow it, so they drop to the subtitle.
+ */
+function batteryCard(battery, packs) {
+  return packs?.length > 1
+    ? { title: "Graphene battery", subtitle: `${battery} — pick your pack` }
+    : { title: battery, subtitle: "Graphene — fast, durable and reliable" }
+}
+
+/**
  * Builds the three bento tabs. Slots 0/2/4 are the tall cards, and the photo
  * cards are drawn only from the model's own shots — Thunder's detail photos all
  * show a branded red Thunder, so reusing them here would put the wrong scooter
  * on the page. Everything else falls back to a tint.
  *
- * @param {{ pick: (i: number) => string, stylingNote: string }} config
+ * Performance slot 0 leads on range where we have one; without it (Wenu) the
+ * battery leads instead and slot 2 picks up home charging.
+ *
+ * @param {{ pick: (i: number) => string, stylingNote: string, rangeKm?: number,
+ *   battery: string, packs?: Pack[] }} config
  */
-function sharedFeatureTabs({ pick, stylingNote }) {
+function sharedFeatureTabs({ pick, stylingNote, rangeKm, battery, packs }) {
   return [
     {
       id: "performance",
@@ -121,10 +186,14 @@ function sharedFeatureTabs({ pick, stylingNote }) {
       title: "Performance",
       subtitle: "Ready. Set. Ride.",
       cards: [
-        { icon: "Gauge", title: "Up to 100 km", subtitle: "Go the distance on a single charge", image: pick(0) },
+        rangeKm
+          ? { icon: "Gauge", title: `Up to ${rangeKm} km`, subtitle: "Go the distance on a single charge", image: pick(0) }
+          : { icon: "BatteryCharging", title: "Graphene battery", subtitle: "Fast, durable and reliable", image: pick(0) },
         { icon: "Zap", title: "3 ride modes", subtitle: "Speed modes 1, 2 & 3", tint: "rose" },
-        { icon: "BatteryCharging", title: "Graphene battery", subtitle: "Fast, durable and reliable", image: pick(1) },
-        { icon: "Timer", title: "9–10 hrs charging", subtitle: "Charge at home overnight", tint: "cream" },
+        rangeKm
+          ? { icon: "BatteryCharging", ...batteryCard(battery, packs), image: pick(1) }
+          : { icon: "PlugZap", title: "Charge at home", subtitle: "Any standard 5A socket", image: pick(1) },
+        { icon: "Timer", title: `${CHARGE_TIME} charging`, subtitle: "Charge at home overnight", tint: "cream" },
         { icon: "Disc", title: "Disc + drum brakes", subtitle: "Confident stopping power", tint: "mint" },
         { icon: "RotateCcw", title: "Reverse mode", subtitle: "Effortless parking, every time", tint: "cream" },
       ],
@@ -161,28 +230,37 @@ function sharedFeatureTabs({ pick, stylingNote }) {
 }
 
 /**
- * One catalogue entry for a model whose sheet matches the shared figures.
+ * One catalogue entry for a model that shares the range-wide feature set.
  *
- * PRICE-LESS: these sheets carry no price, so the entry sets `priceLabel` and
- * omits `price`. BikeHero and BikeColours read that as "enquire" rather than
+ * PRICE-LESS (Wenu only, now): with no `price` the entry falls back to
+ * `priceLabel`. BikeHero and BikeColours read that as "enquire" rather than
  * "buy", and BookingPage bounces /<slug>/book back to the model page — there's
- * nothing to configure a price against yet. Add `price` + `booking` when the
- * figures land and both flows light up on their own.
+ * nothing to configure a booking against. Add `price` and both flows light up
+ * on their own, `booking` included.
+ *
+ * `packs` lists the battery/price combinations the model is sold in — one for
+ * most models, two for Spot. The headline price is the cheapest pack, and where
+ * there's more than one they're all spelled out in `specNote`, which the hero
+ * prints under the stats. Omit `packs` entirely (Wenu) and the entry falls back
+ * to `priceLabel`.
  *
  * `colours` deliberately lists only finishes with their own studio shot, so a
  * card never shows blue paint under a "Red" label. Those same shots are the only
- * photography these pages have, so `pick()` cycles them for the bento and
- * service cards.
+ * photography these pages have, so they double as the booking-page stage image
+ * (`bg`) and `pick()` cycles them for the bento and service cards.
  *
  * @param {{ slug: string, name: string, shortName?: string, tagline: string,
- *   image: string, showcaseImage: string, showcaseSubject: string,
- *   variants: { colour: string, image: string }[], stylingNote: string }} config
+ *   packs?: Pack[], rangeKm?: number, image: string, showcaseImage: string,
+ *   showcaseSubject: string, variants: { colour: string, image: string }[],
+ *   stylingNote: string }} config
  */
 function sharedSpecBike({
   slug,
   name,
   shortName,
   tagline,
+  packs,
+  rangeKm,
   image,
   showcaseImage,
   showcaseSubject,
@@ -193,17 +271,32 @@ function sharedSpecBike({
   const shots = variants.map((v) => v.image)
   const pick = (i) => shots[i % shots.length]
 
+  // Cheapest pack leads; the hero already frames `price` as "Starting at".
+  const headline = packs && packs.reduce((a, b) => (b.price < a.price ? b : a))
+  const battery = packs ? packs.map(packLabel).join(" / ") : "Graphene"
+  // Two packs means two prices, so the note carries both; one pack just names it.
+  const packNote =
+    packs?.length > 1
+      ? `${packs.map((p) => `${packLabel(p)} ${inr(p.price)}`).join(" · ")} · `
+      : packs
+        ? `${battery} · `
+        : ""
+
   return {
     slug,
     name,
     shortName: short,
     eyebrow: "INTRODUCING",
     tagline,
-    priceLabel: "Price on request",
+    ...(headline ? { price: inr(headline.price) } : { priceLabel: "Price on request" }),
     image,
 
-    heroStats: SHARED_HERO_STATS,
-    specNote: `Specs of the ${name} · Graphene battery, built for Indian conditions.`,
+    battery,
+    ...(packs ? { packs } : {}),
+    ...(rangeKm ? { rangeKm } : {}),
+
+    heroStats: heroStats({ rangeKm, battery }),
+    specNote: `Specs of the ${name} · ${packNote}Graphene battery, built for Indian conditions.`,
 
     showcase: {
       title: `The all-new ${showcaseSubject}`,
@@ -211,13 +304,17 @@ function sharedSpecBike({
       features: [
         "Keyless entry & anti-theft",
         "Reverse & cruise mode",
-        "Up to 100 km range",
+        rangeKm ? `Up to ${rangeKm} km range` : "Graphene battery",
         "Available in 5 colours",
       ],
     },
 
-    highlights: SHARED_HIGHLIGHTS,
-    colours: variants.map(({ colour }) => FINISHES.find((f) => f.name === colour)),
+    highlights: highlightList(rangeKm),
+    // The studio shot doubles as the booking-page stage image for that finish.
+    colours: variants.map(({ colour, image: shot }) => ({
+      ...FINISHES.find((f) => f.name === colour),
+      bg: shot,
+    })),
 
     variants: variants.map(({ colour, image: shot }) => ({
       id: `${slug}-${colour.toLowerCase()}`,
@@ -225,16 +322,31 @@ function sharedSpecBike({
       accent: VARIANT_ACCENTS[colour],
       image: shot,
     })),
-    variantSpecs: SHARED_VARIANT_SPECS,
+    variantSpecs: variantSpecs(rangeKm, battery),
 
     keyFeatures: SHARED_KEY_FEATURES,
     service: sharedService(pick),
-    featureTabs: sharedFeatureTabs({ pick, stylingNote }),
+    featureTabs: sharedFeatureTabs({ pick, stylingNote, rangeKm, battery, packs }),
+
+    ...(headline
+      ? {
+          booking: {
+            bookingAmount: "₹999",
+            emi: monthlyEmi(headline.price),
+            range: rangeKm ? `${rangeKm} km` : battery,
+            benefitsNote: "No registration or licence needed — ride completely hassle-free.",
+          },
+        }
+      : {}),
 
     // `specGroups` and `warranty` are Thunder-only for now — the mechanical
     // rows (suspension, brake, tyre size) aren't documented for these models.
   }
 }
+
+const THUNDER_PACK = { volts: 60, ah: 32, price: 45000 }
+const THUNDER_BATTERY = packLabel(THUNDER_PACK)
+const THUNDER_RANGE_KM = 60
 
 export const BIKES = {
   thunder: {
@@ -243,16 +355,15 @@ export const BIKES = {
     shortName: "Thunder",
     eyebrow: "INTRODUCING",
     tagline: "Bold looks. Effortless range. Made for every Indian road.",
-    price: "₹53,000",
+    price: inr(THUNDER_PACK.price),
+    packs: [THUNDER_PACK],
+    battery: THUNDER_BATTERY,
+    rangeKm: THUNDER_RANGE_KM,
     image: "/explore-pages/thunder_bike.png",
 
     // Hero highlight stats
-    heroStats: [
-      { value: "100 km", label: "Range / charge" },
-      { value: "9–10 hrs", label: "Charging time" },
-      { value: "0", label: "Emissions" },
-    ],
-    specNote: "Specs of the Venu Thunder · Graphene battery, built for Indian conditions.",
+    heroStats: heroStats({ rangeKm: THUNDER_RANGE_KM, battery: THUNDER_BATTERY }),
+    specNote: `Specs of the Venu Thunder · ${THUNDER_BATTERY} · Graphene battery, built for Indian conditions.`,
 
     // "Ride the future" showcase — poster image carries the bike + display text
     showcase: {
@@ -261,20 +372,13 @@ export const BIKES = {
       features: [
         "Keyless entry & anti-theft",
         "Reverse & cruise mode",
-        "Up to 100 km range",
+        `Up to ${THUNDER_RANGE_KM} km range`,
         "Available in 5 colours",
       ],
     },
 
     // Quick highlights (icon badges)
-    highlights: [
-      "100% eco-friendly vehicle",
-      "Charge at home",
-      "Up to 100 km on a single charge",
-      "Made for Indian conditions",
-      "Graphene battery",
-      "9–10 hrs charging time",
-    ],
+    highlights: highlightList(THUNDER_RANGE_KM),
 
     // `bg` = configurator stage image for that colour (falls back to Red's shot).
     colours: [
@@ -292,17 +396,18 @@ export const BIKES = {
       { id: "blue", colour: "Blue", accent: "#2563EB", image: "/Home-page/blue_thunder_scooty.png" },
       { id: "grey", colour: "Grey", accent: "#6B7280", image: "/Home-page/grey_thunder_scooty.png" },
     ],
-    variantSpecs: {
-      columns: [
-        { value: "100 km", label: "Range / charge" },
-        { value: "9–10 hrs", label: "Charging time" },
-        { value: "80 kg", label: "Kerb weight" },
-      ],
-      bullets: ["Keyless entry & anti-theft", "Reverse & cruise mode"],
-    },
+    variantSpecs: variantSpecs(THUNDER_RANGE_KM, THUNDER_BATTERY),
 
     // +Features (mechanical)
     specGroups: [
+      {
+        title: "Battery & range",
+        rows: [
+          { label: "Battery", value: `${THUNDER_BATTERY} graphene` },
+          { label: "Range per charge", value: `${THUNDER_RANGE_KM} km` },
+          { label: "Charging time", value: CHARGE_TIME },
+        ],
+      },
       {
         title: "Suspension",
         rows: [
@@ -358,8 +463,8 @@ export const BIKES = {
     // Booking / configurator page (/thunder/book). Colours reuse `variants`.
     booking: {
       bookingAmount: "₹999",
-      emi: "₹1,499/mo",
-      range: "100 km",
+      emi: monthlyEmi(THUNDER_PACK.price),
+      range: `${THUNDER_RANGE_KM} km`,
       benefitsNote: "No registration or licence needed — ride completely hassle-free.",
     },
 
@@ -405,10 +510,10 @@ export const BIKES = {
         title: "Performance",
         subtitle: "Ready. Set. Ride.",
         cards: [
-          { icon: "Gauge", title: "Up to 100 km", subtitle: "Go the distance on a single charge", image: "/explore-pages/thunder_performance_category.png" },
+          { icon: "Gauge", title: `Up to ${THUNDER_RANGE_KM} km`, subtitle: "Go the distance on a single charge", image: "/explore-pages/thunder_performance_category.png" },
           { icon: "Zap", title: "3 ride modes", subtitle: "Speed modes 1, 2 & 3", tint: "rose" },
-          { icon: "BatteryCharging", title: "Graphene battery", subtitle: "Fast, durable and reliable", image: "/explore-pages/thunder_battery.png" },
-          { icon: "Timer", title: "9–10 hrs charging", subtitle: "Charge at home overnight", tint: "cream" },
+          { icon: "BatteryCharging", title: THUNDER_BATTERY, subtitle: "Graphene — fast, durable and reliable", image: "/explore-pages/thunder_battery.png" },
+          { icon: "Timer", title: `${CHARGE_TIME} charging`, subtitle: "Charge at home overnight", tint: "cream" },
           { icon: "Disc", title: "Disc + drum brakes", subtitle: "Confident stopping power", image: "/explore-pages/thunder_disc.png" },
           { icon: "RotateCcw", title: "Reverse mode", subtitle: "Effortless parking, every time", tint: "cream" },
         ],
@@ -449,6 +554,8 @@ export const BIKES = {
     slug: "icon",
     name: "Venu Icon",
     tagline: "Clean lines, calm ride. The everyday electric for Indian families.",
+    packs: [{ volts: 60, ah: 42, price: 60000 }],
+    rangeKm: 80,
     image: "/explore-pages/icon_bike.png",
     showcaseImage: "/Home-page/icon_blue_scooty.png",
     showcaseSubject: "Venu Icon",
@@ -466,6 +573,8 @@ export const BIKES = {
     slug: "efly",
     name: "Venu E-Fly",
     tagline: "Light on its feet. Built for the daily city run.",
+    packs: [{ volts: 60, ah: 42, price: 59000 }],
+    rangeKm: 80,
     image: "/explore-pages/efly_bike.png",
     showcaseImage: "/Home-page/red_efly_scooty.png",
     showcaseSubject: "Venu E-Fly",
@@ -478,6 +587,7 @@ export const BIKES = {
     ],
   }),
 
+  /** Wenu — the one model the team's price list doesn't cover yet. */
   wenu: sharedSpecBike({
     slug: "wenu",
     name: "Wenu eBike",
@@ -496,11 +606,20 @@ export const BIKES = {
     ],
   }),
 
-  /** Spot — `White_Spot_Scooty.png` is mixed case on disk; referenced verbatim. */
+  /**
+   * Spot — sold in two packs, so the hero leads on the cheaper one and the
+   * spec note carries both. `White_Spot_Scooty.png` is mixed case on disk;
+   * referenced verbatim.
+   */
   spot: sharedSpecBike({
     slug: "spot",
     name: "Venu Spot",
     tagline: "Sharp, sporty and street-ready. Made to be noticed.",
+    packs: [
+      { volts: 48, ah: 32, price: 35000 },
+      { volts: 60, ah: 32, price: 38000 },
+    ],
+    rangeKm: 60,
     image: "/explore-pages/spot_bike.png",
     showcaseImage: "/Home-page/red_spot_scooty.png",
     showcaseSubject: "Venu Spot",

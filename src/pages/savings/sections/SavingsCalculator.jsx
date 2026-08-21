@@ -3,15 +3,7 @@ import { Link } from "react-router-dom"
 import { ArrowRight, Fuel } from "lucide-react"
 import { Slider } from "@/components/ui/slider"
 import SelectField from "@/components/form/SelectField"
-import {
-  CONTROLS,
-  MODELS,
-  RANGE_KM,
-  UNITS_PER_FULL_CHARGE,
-  calculateSavings,
-  inr,
-  inrPrecise,
-} from "../savings"
+import { CONTROLS, MODELS, calculateSavings, inr, inrPrecise } from "../savings"
 
 /** Emerald track + a thumb big enough to grab on a touch screen. */
 const sliderClass =
@@ -72,9 +64,10 @@ export default function SavingsCalculator() {
   const [tariff, setTariff] = useState(CONTROLS.tariff.initial)
 
   const model = MODELS.find((m) => m.name === modelName) ?? MODELS[0]
+  const { units, rangeKm } = model
   const result = useMemo(
-    () => calculateSavings({ dailyKm, mileage, petrolPrice, tariff }),
-    [dailyKm, mileage, petrolPrice, tariff]
+    () => calculateSavings({ dailyKm, mileage, petrolPrice, tariff, units, rangeKm }),
+    [dailyKm, mileage, petrolPrice, tariff, units, rangeKm]
   )
 
   return (
@@ -221,9 +214,9 @@ export default function SavingsCalculator() {
       </Link>
 
       <p className="mt-6 text-xs leading-relaxed text-neutral-400">
-        Indicative only. Electricity cost assumes about {UNITS_PER_FULL_CHARGE} units per
-        full charge for {RANGE_KM} km of range; a month is counted as 30 days. Real figures
-        vary with load, terrain, riding style and local tariffs.
+        Indicative only. Electricity cost assumes about {units.toFixed(1)} units per full
+        charge for the {model.shortName}'s {rangeKm} km of range; a month is counted as 30
+        days. Real figures vary with load, terrain, riding style and local tariffs.
       </p>
     </div>
   )

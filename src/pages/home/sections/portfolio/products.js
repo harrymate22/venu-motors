@@ -1,3 +1,5 @@
+import { BIKES, CHARGE_TIME } from "@/pages/explore/bikes"
+
 /**
  * Portfolio models shown in the "Meet the Venu …" home section.
  *
@@ -5,13 +7,10 @@
  * them (Thunder / Icon / E-Fly / Wenu / Spot) and the heading follows the
  * active group.
  *
- * Thunder data sourced from venumotors.com/thunder (₹53,000 on-road, 65–70 km
- * range, 8 hr charge, colours Red / Blue / Grey), each with its own product shot.
- *
- * Icon, E-Fly, Wenu and Spot come from their spec sheets, which all carry
- * identical figures — 100 km / charge, 9–10 hr charge, graphene battery, 80 kg,
- * and the same five finishes. None of those sheets lists a price, so their cards
- * show `priceLabel` instead of a figure. All four are built by `colourCards`.
+ * Price, range and charging time are NOT repeated here — every card reads them
+ * off the catalogue entry in bikes.js, so the team's price list only has to be
+ * applied in one place. What lives here is card-only copy: which finishes get a
+ * card, their taglines, and which shot each one uses.
  *
  * @typedef {Object} Product
  * @property {string}    id
@@ -22,7 +21,7 @@
  * @property {string}   [secondaryLabel] Secondary CTA text (default: "Buy Now")
  * @property {string}    variant     Colour name shown as the accent label
  * @property {string}    tagline
- * @property {string}   [price]      On-road price, e.g. "₹53,000"
+ * @property {string}   [price]      On-road price, e.g. "₹45,000"
  * @property {string}   [priceLabel] Shown when `price` is unknown
  * @property {string[]}  specs       Short spec chips
  * @property {string}    accent      Hex accent for the variant label
@@ -55,7 +54,10 @@ const ACCENTS = {
 }
 
 /**
- * Builds one card per finish for a model whose specs are shared across colours.
+ * Builds one card per finish. Specs are shared across a model's colours, so the
+ * price/range/charge chips all come from `BIKES[modelId]`; only the paint, the
+ * tagline and the shot change per card.
+ *
  * Colours without their own shot fall back to `fallbackImage`, so a card can
  * show a mismatched paint colour until real photography lands.
  *
@@ -67,6 +69,7 @@ const ACCENTS = {
  */
 function colourCards({ modelId, model, shortName, colours, fallbackImage }) {
   const ctaName = shortName ?? model.replace(/^Venu\s/, "")
+  const bike = BIKES[modelId]
 
   return colours.map(({ id, name, tagline, image }) => ({
     id: `${modelId}-${id}`,
@@ -78,12 +81,43 @@ function colourCards({ modelId, model, shortName, colours, fallbackImage }) {
     tagline,
     image: image ?? fallbackImage,
     ctaLabel: `Explore ${ctaName}`,
-    // No published price on these sheets, so the second action stays an enquiry.
-    secondaryLabel: "Book a test ride",
-    priceLabel: "Price on request",
-    specs: ["Up to 100 km range", "9–10 hr full charge"],
+    ...(bike.price
+      ? { price: bike.price, secondaryLabel: "Buy Now" }
+      : // No price on this model yet, so the second action stays an enquiry.
+        { priceLabel: bike.priceLabel, secondaryLabel: "Book a test ride" }),
+    specs: [
+      bike.rangeKm ? `${bike.rangeKm} km range` : `${bike.battery} battery`,
+      `${CHARGE_TIME} full charge`,
+    ],
   }))
 }
+
+/** Thunder — Green and White cards wait on their studio shots. */
+const THUNDER_PRODUCTS = colourCards({
+  modelId: "thunder",
+  model: "Venu Thunder",
+  fallbackImage: "/Home-page/red_thunder_scooty.png",
+  colours: [
+    {
+      id: "red",
+      name: "Red",
+      tagline: "Bold looks, effortless everyday ride",
+      image: "/Home-page/red_thunder_scooty.png",
+    },
+    {
+      id: "blue",
+      name: "Blue",
+      tagline: "Built for Indian roads",
+      image: "/Home-page/blue_thunder_scooty.png",
+    },
+    {
+      id: "grey",
+      name: "Grey",
+      tagline: "Ride green, every single day",
+      image: "/Home-page/grey_thunder_scooty.png",
+    },
+  ],
+})
 
 /** Icon — every finish has its own shot except Red, which falls back to cyan. */
 const ICON_PRODUCTS = colourCards({
@@ -107,7 +141,7 @@ const ICON_PRODUCTS = colourCards({
     {
       id: "green",
       name: "Green",
-      tagline: "Ride green, 100 km at a time",
+      tagline: "Ride green, 80 km at a time",
       image: "/Home-page/icon_green_scooty.png",
     },
     {
@@ -154,8 +188,9 @@ const EFLY_PRODUCTS = colourCards({
 })
 
 /**
- * Wenu eBike — retro-bodied model. All five finishes have their own shot, so
- * `fallbackImage` is unused here for now.
+ * Wenu eBike — retro-bodied model, and the one the team's price list doesn't
+ * cover yet, so its cards show "Price on request". All five finishes have their
+ * own shot, so `fallbackImage` is unused here for now.
  *
  * NOTE: /public/WENU_RED.jpeg and /public/WENU_SILVERY.jpeg exist but are a
  * different treatment (flat background, dual view, ultra-wide), so they'd crop
@@ -201,7 +236,9 @@ const WENU_PRODUCTS = colourCards({
 })
 
 /**
- * Spot — sport-bodied model. All five finishes have their own shot, so
+ * Spot — sport-bodied model and the most affordable in the range. It's sold in
+ * two battery packs (48V and 60V); the card shows the 48V price with "onwards"
+ * and the model page spells both out. All five finishes have their own shot, so
  * `fallbackImage` is unused here for now.
  *
  * NOTE: the file is `White_Spot_Scooty.png` (mixed case) while every other
@@ -253,41 +290,7 @@ export const MODELS = [
     id: "thunder",
     label: "Thunder",
     heading: "Meet the Venu Thunder",
-    products: [
-      {
-        id: "thunder-red",
-        model: "Venu Thunder",
-        slug: "thunder",
-        variant: "Red",
-        tagline: "Bold looks, effortless everyday ride",
-        price: "₹53,000",
-        specs: ["65–70 km range", "8 hr full charge"],
-        accent: "#E11D48",
-        image: "/Home-page/red_thunder_scooty.png",
-      },
-      {
-        id: "thunder-blue",
-        model: "Venu Thunder",
-        slug: "thunder",
-        variant: "Blue",
-        tagline: "Built for Indian roads",
-        price: "₹53,000",
-        specs: ["65–70 km range", "8 hr full charge"],
-        accent: "#2563EB",
-        image: "/Home-page/blue_thunder_scooty.png",
-      },
-      {
-        id: "thunder-grey",
-        model: "Venu Thunder",
-        slug: "thunder",
-        variant: "Grey",
-        tagline: "Ride green, every single day",
-        price: "₹53,000",
-        specs: ["65–70 km range", "8 hr full charge"],
-        accent: "#6B7280",
-        image: "/Home-page/grey_thunder_scooty.png",
-      },
-    ],
+    products: THUNDER_PRODUCTS,
   },
   {
     id: "icon",

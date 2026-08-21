@@ -3,11 +3,12 @@ import { motion, useScroll, useTransform } from "motion/react"
 import { ChevronDown } from "lucide-react"
 
 /**
- * Numbers are product facts from the Thunder spec sheet — not usage/company
- * telemetry — so they stay true without needing a "as on <date>" caveat.
+ * Numbers are product facts from the catalogue (see bikes.js) — not usage or
+ * company telemetry — so they stay true without needing a "as on <date>"
+ * caveat. The range is the best in the line-up (Icon and E-Fly, 60V 42Ah).
  */
 const STATS = [
-  { value: "100", unit: "km", label: "Range on a single charge" },
+  { value: "80", unit: "km", label: "Range on a single charge" },
   { value: "Zero", label: "Emissions on every ride" },
   { value: "₹0", label: "Licence, RTO & petrol bills" },
 ]

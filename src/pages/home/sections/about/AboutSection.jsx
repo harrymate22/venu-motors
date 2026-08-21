@@ -21,7 +21,8 @@ export default function AboutSection() {
             At Venu Motors, we're redefining everyday mobility across India with
             affordable, reliable electric scooters like the Thunder. Built for Indian
             roads and made to be owned effortlessly — no registration, no licence, and
-            home charging that delivers 65–70 km on a single charge. We're on a mission
+            home charging that delivers 60–80 km on a single charge across the range.
+            We're on a mission
             to put clean, silent, and truly practical EVs in every household.
           </p>
 

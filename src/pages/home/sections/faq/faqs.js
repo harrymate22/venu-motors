@@ -1,7 +1,8 @@
 /**
  * Frequently asked questions — written for the Venu Thunder.
- * (venumotors.com has no FAQ block yet, so these are tailored from its specs:
- *  ₹53,000 on-road, 65–70 km range, 8 hr home charge, no registration/licence.)
+ * (venumotors.com has no FAQ block yet, so these are tailored from its specs.
+ *  Figures follow the sales team's Aug 2026 price list, same source as bikes.js:
+ *  ₹45,000 on-road, 60V 32Ah, 60 km range, 9–10 hr home charge.)
  *
  * @typedef {Object} Faq
  * @property {string} id
@@ -15,19 +16,19 @@ export const FAQS = [
     id: "price",
     question: "How much does the Venu Thunder cost?",
     answer:
-      "The Venu Thunder is priced at ₹53,000 on-road and is available in Red, Blue and Grey. Visit your nearest Venu Motors dealership for the latest offers and to book a test ride.",
+      "The Venu Thunder is priced at ₹45,000 on-road and is available in Red, Blue and Grey. Visit your nearest Venu Motors dealership for the latest offers and to book a test ride.",
   },
   {
     id: "charge",
     question: "How do I charge the Venu Thunder?",
     answer:
-      "Charging is as simple as charging your phone. Just plug the Thunder into any standard 5-amp home socket — a full charge takes about 8 hours, and no special charging setup is required.",
+      "Charging is as simple as charging your phone. Just plug the Thunder into any standard 5-amp home socket — a full charge takes about 9 to 10 hours, and no special charging setup is required.",
   },
   {
     id: "range",
     question: "What is the range on a single charge?",
     answer:
-      "The Venu Thunder delivers 65–70 km of real-world range on a single full charge, which comfortably covers a week of everyday city commuting for most riders.",
+      "The Venu Thunder's 60V 32Ah graphene pack delivers 60 km of real-world range on a single full charge. If you need more, the Venu Icon and E-Fly run a 60V 42Ah pack that's good for 80 km.",
   },
   {
     id: "licence",
