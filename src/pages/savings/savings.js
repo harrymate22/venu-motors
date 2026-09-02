@@ -1,4 +1,4 @@
-import { BIKE_LIST, packKwh } from "@/pages/explore/bikes"
+import { BIKE_LIST, costablePacks, packKwh } from "@/pages/explore/bikes"
 
 /**
  * Petrol-vs-electric running cost model.
@@ -26,17 +26,25 @@ export const CONTROLS = {
 }
 
 /**
- * Only models with a published range can be costed, which for now leaves Wenu
- * out of the picker — see the note at the top of bikes.js.
+ * Costing a charge needs both a published range and a pack with a size to work
+ * out the kWh from, so a model missing either stays out of the picker. That
+ * leaves E-Fighter out: it's priced by chemistry rather than by pack size, and
+ * quotes a 60–100 km band rather than one figure — see the note at the top of
+ * bikes.js.
  */
-export const MODELS = BIKE_LIST.filter((bike) => bike.rangeKm && bike.packs).map((bike) => ({
-  name: bike.name,
-  slug: bike.slug,
-  shortName: bike.shortName ?? bike.name,
-  rangeKm: bike.rangeKm,
-  /** Cheapest pack — the one the headline price quotes. */
-  units: unitsPerFullCharge(bike.packs.reduce((a, b) => (b.price < a.price ? b : a))),
-}))
+export const MODELS = BIKE_LIST.flatMap((bike) => {
+  const packs = costablePacks(bike.packs)
+  if (!bike.rangeKm || !packs.length) return []
+
+  return {
+    name: bike.name,
+    slug: bike.slug,
+    shortName: bike.shortName ?? bike.name,
+    rangeKm: bike.rangeKm,
+    /** Cheapest pack — the one the headline price quotes. */
+    units: unitsPerFullCharge(packs.reduce((a, b) => (b.price < a.price ? b : a))),
+  }
+})
 
 const DAYS_PER_MONTH = 30
 const DAYS_PER_YEAR = 365

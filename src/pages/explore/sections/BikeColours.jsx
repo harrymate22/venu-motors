@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { numberWord } from "@/pages/explore/bikes"
 import { Button } from "@/components/ui/button"
 import SparkIcon from "@/components/SparkIcon"
 import {
@@ -123,8 +124,11 @@ export default function BikeColours({ bike }) {
               <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
                 Choose your {bike.shortName ?? bike.name}
               </h2>
+              {/* Finish count comes from the catalogue list, not from the cards
+                  below — a model can be sold in a colour we've yet to shoot. */}
               <p className="mt-3 max-w-xl text-white/60">
-                Same effortless ride, five bold finishes. Pick the colour that's you.
+                Same effortless ride, {numberWord(bike.colours.length)} bold finishes. Pick the
+                colour that's you.
               </p>
             </div>
             <div className={cn("items-center gap-2", scrollable ? "hidden md:flex" : "hidden")}>

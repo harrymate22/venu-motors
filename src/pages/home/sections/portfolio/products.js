@@ -1,37 +1,36 @@
-import { BIKES, CHARGE_TIME } from "@/pages/explore/bikes"
+import { BIKES } from "@/pages/explore/bikes"
 
 /**
  * Portfolio models shown in the "Meet the Venu …" home section.
  *
  * The section renders one model group at a time; the header toggle swaps between
- * them (Thunder / Icon / E-Fly / Wenu / Spot) and the heading follows the
+ * them (Thunder / Icon / E-Fly / E-Fighter / Spot) and the heading follows the
  * active group.
  *
- * Price, range and charging time are NOT repeated here — every card reads them
- * off the catalogue entry in bikes.js, so the team's price list only has to be
- * applied in one place. What lives here is card-only copy: which finishes get a
- * card, their taglines, and which shot each one uses.
+ * NOTHING about a model is repeated here. Which finishes exist, what they're
+ * called, their accent colour, their photography, the price, the range and the
+ * charging time all come off the catalogue entry in bikes.js, so the product
+ * catalogue and the sales price list are each applied in exactly one place.
+ * What lives here is card-only copy: the one-line tagline per finish.
+ *
+ * Cards are built from a model's `variants`, which is the set of finishes that
+ * have their own studio shot — so a card can never show one colour's paint under
+ * another colour's label. A catalogue finish we haven't shot yet still appears
+ * in the configurator on the model page; it just doesn't get a card here.
  *
  * @typedef {Object} Product
  * @property {string}    id
  * @property {string}    model       e.g. "Venu Thunder"
- * @property {string}   [slug]       Explore route, e.g. "thunder" → /thunder
- * @property {string}   [href]       Plain link, used when there's no bike page yet
- * @property {string}   [ctaLabel]   Primary CTA text (default: "Explore <model>")
- * @property {string}   [secondaryLabel] Secondary CTA text (default: "Buy Now")
- * @property {string}    variant     Colour name shown as the accent label
+ * @property {string}    slug        Explore route, e.g. "thunder" → /thunder
+ * @property {string}    ctaLabel    Primary CTA text
+ * @property {string}    secondaryLabel
+ * @property {string}    variant     Catalogue colour name, shown as the accent label
  * @property {string}    tagline
  * @property {string}   [price]      On-road price, e.g. "₹45,000"
  * @property {string}   [priceLabel] Shown when `price` is unknown
  * @property {string[]}  specs       Short spec chips
  * @property {string}    accent      Hex accent for the variant label
  * @property {string}    image
- *
- * @typedef {Object} Colour
- * @property {string}  id
- * @property {string}  name
- * @property {string}  tagline
- * @property {string} [image]  Falls back to the model's `fallbackImage`
  *
  * @typedef {Object} Model
  * @property {string}    id
@@ -41,247 +40,99 @@ import { BIKES, CHARGE_TIME } from "@/pages/explore/bikes"
  */
 
 /**
- * Label colours for the shared five-finish palette — the colour of the variant
- * name, not the paint. White uses a readable slate so it doesn't disappear
- * against the white card.
- */
-const ACCENTS = {
-  red: "#E11D48",
-  grey: "#6B7280",
-  blue: "#2563EB",
-  green: "#16A34A",
-  white: "#64748B",
-}
-
-/**
- * Builds one card per finish. Specs are shared across a model's colours, so the
- * price/range/charge chips all come from `BIKES[modelId]`; only the paint, the
- * tagline and the shot change per card.
+ * Builds one card per photographed finish of a model.
  *
- * Colours without their own shot fall back to `fallbackImage`, so a card can
- * show a mismatched paint colour until real photography lands.
+ * `taglines` is keyed by the catalogue colour name exactly as bikes.js spells it
+ * ("Gray / Silver", "Red / Mehrun", …). A finish with no entry here falls back
+ * to the model's own tagline rather than rendering an empty line, so adding
+ * photography for a new colour can never ship a blank card.
  *
- * `shortName` is the name used in the CTA; it defaults to the model without the
- * "Venu " prefix, which is too long for a button on some models.
- *
- * @param {{ modelId: string, model: string, shortName?: string, colours: Colour[], fallbackImage: string }} config
+ * @param {{ modelId: string, taglines: Record<string, string> }} config
  * @returns {Product[]}
  */
-function colourCards({ modelId, model, shortName, colours, fallbackImage }) {
-  const ctaName = shortName ?? model.replace(/^Venu\s/, "")
+function colourCards({ modelId, taglines }) {
   const bike = BIKES[modelId]
 
-  return colours.map(({ id, name, tagline, image }) => ({
-    id: `${modelId}-${id}`,
-    model,
-    // Every model now has its own page; `modelId` doubles as the route slug.
-    slug: modelId,
-    variant: name,
-    accent: ACCENTS[id],
-    tagline,
-    image: image ?? fallbackImage,
-    ctaLabel: `Explore ${ctaName}`,
+  return bike.variants.map((variant) => ({
+    id: variant.id,
+    model: bike.name,
+    slug: bike.slug,
+    variant: variant.colour,
+    accent: variant.accent,
+    tagline: taglines[variant.colour] ?? bike.tagline,
+    image: variant.image,
+    ctaLabel: `Explore ${bike.shortName}`,
     ...(bike.price
       ? { price: bike.price, secondaryLabel: "Buy Now" }
       : // No price on this model yet, so the second action stays an enquiry.
         { priceLabel: bike.priceLabel, secondaryLabel: "Book a test ride" }),
-    specs: [
-      bike.rangeKm ? `${bike.rangeKm} km range` : `${bike.battery} battery`,
-      `${CHARGE_TIME} full charge`,
-    ],
+    specs: [`${bike.rangeText} range`, `${bike.chargeTime} full charge`],
   }))
 }
 
-/** Thunder — Green and White cards wait on their studio shots. */
+/** Thunder — Black and Green wait on their studio shots. */
 const THUNDER_PRODUCTS = colourCards({
   modelId: "thunder",
-  model: "Venu Thunder",
-  fallbackImage: "/Home-page/red_thunder_scooty.png",
-  colours: [
-    {
-      id: "red",
-      name: "Red",
-      tagline: "Bold looks, effortless everyday ride",
-      image: "/Home-page/red_thunder_scooty.png",
-    },
-    {
-      id: "blue",
-      name: "Blue",
-      tagline: "Built for Indian roads",
-      image: "/Home-page/blue_thunder_scooty.png",
-    },
-    {
-      id: "grey",
-      name: "Grey",
-      tagline: "Ride green, every single day",
-      image: "/Home-page/grey_thunder_scooty.png",
-    },
-  ],
+  taglines: {
+    "Red / Mehrun": "Bold looks, effortless everyday ride",
+    Blue: "Built for Indian roads",
+    "Gray / Silver": "Understated finish, ready every day",
+  },
 })
 
-/** Icon — every finish has its own shot except Red, which falls back to cyan. */
+/** Icon — Cherry Red waits on its studio shot. */
 const ICON_PRODUCTS = colourCards({
   modelId: "icon",
-  model: "Venu Icon",
-  fallbackImage: "/Home-page/icon_scooty.png",
-  colours: [
-    { id: "red", name: "Red", tagline: "Bold statement, zero emissions" },
-    {
-      id: "grey",
-      name: "Grey",
-      tagline: "Understated looks, built for Indian roads",
-      image: "/Home-page/icon_grey_scooty.png",
-    },
-    {
-      id: "blue",
-      name: "Blue",
-      tagline: "Keyless, cruise-ready, effortless",
-      image: "/Home-page/icon_blue_scooty.png",
-    },
-    {
-      id: "green",
-      name: "Green",
-      tagline: "Ride green, 80 km at a time",
-      image: "/Home-page/icon_green_scooty.png",
-    },
-    {
-      id: "white",
-      name: "White",
-      tagline: "Clean lines, everyday comfort",
-      image: "/Home-page/icon_white_scooty.png",
-    },
-  ],
+  taglines: {
+    "Aqua Green": "Ride green, 80 km at a time",
+    "Mat Blue": "Keyless, cruise-ready, effortless",
+  },
 })
 
-/** E-Fly — only White still falls back to the Blue shot. */
+/** E-Fly — every catalogue finish is photographed. */
 const EFLY_PRODUCTS = colourCards({
   modelId: "efly",
-  model: "Venu E-Fly",
-  fallbackImage: "/Home-page/blue_efly_scooty.png",
-  colours: [
-    {
-      id: "red",
-      name: "Red",
-      tagline: "Bold looks, zero emissions",
-      image: "/Home-page/red_efly_scooty.png",
-    },
-    {
-      id: "grey",
-      name: "Grey",
-      tagline: "Understated and made for Indian roads",
-      image: "/Home-page/grey_efly_scooty.png",
-    },
-    {
-      id: "blue",
-      name: "Blue",
-      tagline: "Electric mobility, keyless and cruise-ready",
-      image: "/Home-page/blue_efly_scooty.png",
-    },
-    {
-      id: "green",
-      name: "Green",
-      tagline: "Charge at home, ride green daily",
-      image: "/Home-page/green_efly_scooty.png",
-    },
-    { id: "white", name: "White", tagline: "Clean lines, three speed modes" },
-  ],
+  taglines: {
+    "Aqua Green": "Charge at home, ride green daily",
+    "Mat Blue": "Electric mobility, keyless and cruise-ready",
+    "Cherry Red": "Bold looks, zero emissions",
+  },
 })
 
 /**
- * Wenu eBike — retro-bodied model, and the one the team's price list doesn't
- * cover yet, so its cards show "Price on request". All five finishes have their
- * own shot, so `fallbackImage` is unused here for now.
+ * E-Fighter — sold with a choice of chemistry (graphene ₹65,000 or lithium-ion
+ * ₹82,000), so the card quotes the graphene price and the graphene charging
+ * time. Taglines stay off both, since a card can't say which pack you'd pick.
  *
- * NOTE: /public/WENU_RED.jpeg and /public/WENU_SILVERY.jpeg exist but are a
- * different treatment (flat background, dual view, ultra-wide), so they'd crop
- * badly and clash with the studio shots. Left unused deliberately.
+ * PENDING PHOTOGRAPHY: the three `efighter` shots these cards point at don't
+ * exist under /public/Home-page yet (see the note on the entry in bikes.js), so
+ * this group renders with missing images until they land.
  */
-const WENU_PRODUCTS = colourCards({
-  modelId: "wenu",
-  model: "Wenu eBike",
-  shortName: "Wenu",
-  fallbackImage: "/Home-page/blue_wenu_scooty.png",
-  colours: [
-    {
-      id: "red",
-      name: "Red",
-      tagline: "Retro looks, zero emissions",
-      image: "/Home-page/red_wenu_scooty.png",
-    },
-    {
-      id: "grey",
-      name: "Grey",
-      tagline: "Timeless grey, made for Indian roads",
-      image: "/Home-page/grey_wenu_scooty.png",
-    },
-    {
-      id: "blue",
-      name: "Blue",
-      tagline: "Classic styling, electric heart",
-      image: "/Home-page/blue_wenu_scooty.png",
-    },
-    {
-      id: "green",
-      name: "Green",
-      tagline: "Ride green with retro charm",
-      image: "/Home-page/green_wenu_scooty.png",
-    },
-    {
-      id: "white",
-      name: "White",
-      tagline: "Clean classic lines, keyless entry",
-      image: "/Home-page/white_wenu_scooty.png",
-    },
-  ],
+const EFIGHTER_PRODUCTS = colourCards({
+  modelId: "efighter",
+  taglines: {
+    Grey: "Understated finish, disc brakes at both ends",
+    "Cherry Red": "Disc brakes front and rear, bold as they come",
+    Black: "Two battery options, one sharp silhouette",
+  },
 })
 
 /**
  * Spot — sport-bodied model and the most affordable in the range. It's sold in
  * two battery packs (48V and 60V); the card shows the 48V price with "onwards"
- * and the model page spells both out. All five finishes have their own shot, so
- * `fallbackImage` is unused here for now.
+ * and the model page spells both out. Black waits on its studio shot.
  *
- * NOTE: the file is `White_Spot_Scooty.png` (mixed case) while every other
- * asset here is lowercase. Referenced verbatim so it resolves on a
- * case-sensitive host; worth renaming to `white_spot_scooty.png` for consistency.
+ * NOTE: /public/Home-page/White_Spot_Scooty.png is deliberately unused — the
+ * catalogue lists Black rather than White for the Spot.
  */
 const SPOT_PRODUCTS = colourCards({
   modelId: "spot",
-  model: "Venu Spot",
-  fallbackImage: "/Home-page/White_Spot_Scooty.png",
-  colours: [
-    {
-      id: "red",
-      name: "Red",
-      tagline: "Sharp lines, zero emissions",
-      image: "/Home-page/red_spot_scooty.png",
-    },
-    {
-      id: "grey",
-      name: "Grey",
-      tagline: "Street-ready, made for Indian roads",
-      image: "/Home-page/grey_spot_scooty.png",
-    },
-    {
-      id: "blue",
-      name: "Blue",
-      // Filename has colour/model reversed vs the others; referenced verbatim.
-      tagline: "Reverse and cruise, built for the city",
-      image: "/Home-page/spot_blue_scooty.png",
-    },
-    {
-      id: "green",
-      name: "Green",
-      tagline: "Charge at home, ride green",
-      image: "/Home-page/green_spot_scooty.png",
-    },
-    {
-      id: "white",
-      name: "White",
-      tagline: "Bold LED styling, keyless entry",
-      image: "/Home-page/White_Spot_Scooty.png",
-    },
-  ],
+  taglines: {
+    "Red / Mehrun": "Sharp lines, zero emissions",
+    Blue: "Reverse and cruise, built for the city",
+    Green: "Charge at home, ride green",
+    "Gray / Silver": "Street-ready, made for Indian roads",
+  },
 })
 
 /** @type {Model[]} */
@@ -305,10 +156,10 @@ export const MODELS = [
     products: EFLY_PRODUCTS,
   },
   {
-    id: "wenu",
-    label: "Wenu",
-    heading: "Meet the Wenu eBike",
-    products: WENU_PRODUCTS,
+    id: "efighter",
+    label: "E-Fighter",
+    heading: "Meet the Venu E-Fighter",
+    products: EFIGHTER_PRODUCTS,
   },
   {
     id: "spot",

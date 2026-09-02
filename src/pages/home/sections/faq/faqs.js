@@ -2,7 +2,8 @@
  * Frequently asked questions — written for the Venu Thunder.
  * (venumotors.com has no FAQ block yet, so these are tailored from its specs.
  *  Figures follow the sales team's Aug 2026 price list, same source as bikes.js:
- *  ₹45,000 on-road, 60V 32Ah, 60 km range, 9–10 hr home charge.)
+ *  ₹45,000 on-road, 60V 32Ah, 60 km range, 8–10 hr home charge — and the
+ *  product catalogue for the specs and finishes.)
  *
  * @typedef {Object} Faq
  * @property {string} id
@@ -16,13 +17,13 @@ export const FAQS = [
     id: "price",
     question: "How much does the Venu Thunder cost?",
     answer:
-      "The Venu Thunder is priced at ₹45,000 on-road and is available in Red, Blue and Grey. Visit your nearest Venu Motors dealership for the latest offers and to book a test ride.",
+      "The Venu Thunder is priced at ₹45,000 on-road and is available in five finishes. Visit your nearest Venu Motors dealership for the latest offers and to book a test ride.",
   },
   {
     id: "charge",
     question: "How do I charge the Venu Thunder?",
     answer:
-      "Charging is as simple as charging your phone. Just plug the Thunder into any standard 5-amp home socket — a full charge takes about 9 to 10 hours, and no special charging setup is required.",
+      "Charging is as simple as charging your phone. Just plug the Thunder into any standard 5-amp home socket — a full charge takes about 8 to 10 hours, and no special charging setup is required.",
   },
   {
     id: "range",
@@ -46,7 +47,7 @@ export const FAQS = [
     id: "colours",
     question: "What colours are available?",
     answer:
-      "The Venu Thunder comes in three striking finishes — Red, Blue and Grey — each with bold styling and sparkling LED headlights.",
+      "The Venu Thunder comes in five striking finishes — Black, Blue, Green, Gray / Silver and Red / Mehrun — each with bold styling and a premium LED headlamp.",
   },
   {
     id: "roads",

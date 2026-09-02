@@ -18,6 +18,9 @@ import {
   Navigation,
   FileCheck,
   PlugZap,
+  Cog,
+  Box,
+  Droplets,
   Plus,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -25,6 +28,7 @@ import { cn } from "@/lib/utils"
 const ICONS = {
   Gauge, Zap, BatteryCharging, Disc, Timer, RotateCcw, Lightbulb, CircleDot,
   Palette, Armchair, Sparkles, KeyRound, ShieldCheck, Usb, Navigation, FileCheck, PlugZap,
+  Cog, Box, Droplets,
 }
 
 // Woven 3-column mosaic (Ola-style): every column = one tall card (1×2) + one

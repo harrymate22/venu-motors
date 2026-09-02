@@ -12,7 +12,13 @@ export const E_SCOOTERS = [
   { id: "thunder", name: "Thunder", href: "/thunder", image: "/Home-page/red_thunder_scooty.png" },
   { id: "icon", name: "Icon", href: "/icon", image: "/Home-page/icon_scooty.png" },
   { id: "efly", name: "E-Fly", href: "/efly", image: "/Home-page/blue_efly_scooty.png" },
-  { id: "wenu", name: "Wenu", href: "/wenu", image: "/Home-page/blue_wenu_scooty.png" },
+  // PENDING PHOTOGRAPHY — see the E-Fighter entry in src/pages/explore/bikes.js.
+  {
+    id: "efighter",
+    name: "E-Fighter",
+    href: "/efighter",
+    image: "/Home-page/black_efighter_scooty.png",
+  },
   { id: "spot", name: "Spot", href: "/spot", image: "/Home-page/spot_blue_scooty.png" },
 ]
 

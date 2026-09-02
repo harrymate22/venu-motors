@@ -120,7 +120,12 @@ export default function BookingPage() {
   const { slug } = useParams()
   const bike = BIKES[slug]
   const [tab, setTab] = useState("colour")
-  const [colourName, setColourName] = useState(bike?.colours?.[0]?.name)
+  // Open on a finish we have a stage shot for. Colours are listed in catalogue
+  // order, which can start on one we haven't photographed — landing there would
+  // show another colour's bike under this one's label.
+  const [colourName, setColourName] = useState(
+    () => (bike?.colours?.find((c) => c.bg) ?? bike?.colours?.[0])?.name
+  )
   const [city, setCity] = useState("Bengaluru")
   const [cityOpen, setCityOpen] = useState(false)
 
