@@ -1,6 +1,6 @@
 import AboutHero from "./sections/hero/AboutHero"
 import AboutStory from "./sections/story/AboutStory"
-import AboutCare from "./sections/care/AboutCare"
+import AboutLeadership from "./sections/leadership/AboutLeadership"
 import AboutFacility from "./sections/facility/AboutFacility"
 import AboutPeople from "./sections/people/AboutPeople"
 import BlogSection from "@/pages/home/sections/blog/BlogSection"
@@ -11,7 +11,7 @@ export default function AboutPage() {
     <>
       <AboutHero />
       <AboutStory />
-      <AboutCare />
+      <AboutLeadership />
       <AboutFacility />
       <AboutPeople />
       <BlogSection className="bg-white" />
