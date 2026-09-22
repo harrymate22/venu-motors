@@ -36,10 +36,14 @@
  */
 
 /** ₹45,000 — Indian digit grouping. */
-const inr = (value) => `₹${value.toLocaleString("en-IN")}`
+export const inr = (value) => `₹${value.toLocaleString("en-IN")}`
 
-/** "Gray / Silver" → "gray-silver", so catalogue colour names are safe as ids. */
-const slugify = (value) =>
+/**
+ * "Gray / Silver" → "gray-silver", so catalogue colour names are safe as ids.
+ * The shop checkout finds a scooter by these ids (see src/lib/shop.js), so the
+ * same function builds them on both sides.
+ */
+export const slugify = (value) =>
   value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
 
 /** ["A", "B", "C"] → "A, B & C" — for reading a colour list out in a sentence. */
@@ -58,7 +62,7 @@ export const numberWord = (n) => NUMBER_WORDS[n] ?? String(n)
 const EMI_RATE = 0.0699 / 12
 const EMI_MONTHS = 60
 
-function monthlyEmi(price) {
+export function monthlyEmi(price) {
   const growth = (1 + EMI_RATE) ** EMI_MONTHS
   const emi = (price * EMI_RATE * growth) / (growth - 1)
   return `${inr(Math.round(emi / 10) * 10)}/mo`
@@ -92,7 +96,7 @@ const SPEC_DISCLAIMER =
  * of chemistry (E-Fighter) leads on what its cheapest pack charges in, and
  * surfaces the faster option alongside rather than burying it.
  */
-const CHARGE_TIME = {
+export const CHARGE_TIME = {
   Graphene: "8–10 hrs",
   "Lithium-ion": "4–5 hrs",
 }
@@ -124,7 +128,10 @@ const BRAKES_DUAL_DISC = {
  *
  * @typedef {Object} Pack { price, volts?, ah?, chemistry? }
  */
-const packLabel = (pack) => (pack.volts && pack.ah ? `${pack.volts}V ${pack.ah}Ah` : pack.chemistry)
+export const packLabel = (pack) => (pack.volts && pack.ah ? `${pack.volts}V ${pack.ah}Ah` : pack.chemistry)
+
+/** "60V 32Ah" → "60v-32ah", "Lithium-ion" → "lithium-ion" — the battery id the shop checkout expects. */
+export const packId = (pack) => slugify(packLabel(pack))
 
 export const packKwh = ({ volts, ah }) => (volts * ah) / 1000
 
@@ -679,8 +686,10 @@ function sharedSpecBike({
 
     ...(headline
       ? {
+          // Buy now charges the chosen pack's own price in full — there is no
+          // separate booking fee. `emi` quotes the headline (cheapest) pack;
+          // BookingPage recomputes it for whichever pack the buyer picks.
           booking: {
-            bookingAmount: "₹999",
             emi: monthlyEmi(headline.price),
             range: rangeText,
             benefitsNote: "No registration or licence needed — ride completely hassle-free.",

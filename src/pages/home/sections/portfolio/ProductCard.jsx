@@ -78,9 +78,13 @@ export default function ProductCard({ product }) {
               </a>
             )}
           </Button>
-          <Button variant="outline" className="group/btn h-11 w-full gap-2">
-            {secondaryLabel ?? "Buy Now"}
-            <ArrowRight className="size-4 transition-transform group-hover/btn:translate-x-0.5" />
+          {/* Priced models open the configurator on this card's colour; the rest
+              go to the enquiry form. */}
+          <Button asChild variant="outline" className="group/btn h-11 w-full gap-2">
+            <Link to={slug && price ? `/${slug}/book?colour=${encodeURIComponent(variant)}` : "/#enquire"}>
+              {secondaryLabel ?? "Buy Now"}
+              <ArrowRight className="size-4 transition-transform group-hover/btn:translate-x-0.5" />
+            </Link>
           </Button>
         </div>
       </div>

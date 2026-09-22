@@ -72,7 +72,7 @@ function VariantCard({ bike, variant }) {
 
           <div className="mt-4 flex gap-3">
             <Button asChild className="group/btn h-11 flex-1 gap-2">
-              <Link to={price ? `/${slug}/book` : "/#enquire"}>
+              <Link to={price ? `/${slug}/book?colour=${encodeURIComponent(variant.colour)}` : "/#enquire"}>
                 {price ? "Order now" : "Enquire"}
                 <ArrowRight className="size-4 transition-transform group-hover/btn:translate-x-0.5" />
               </Link>

@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Check } from "lucide-react"
 import TextField from "@/components/form/TextField"
 import SelectField from "@/components/form/SelectField"
+import { honeypotProps, submitLead } from "@/lib/shop"
 
 /**
  * Ranges start at the floor set in the requirements section — a 15 × 40 ft
@@ -27,6 +28,8 @@ const EMPTY = { name: "", phone: "", pincode: "", area: "", investment: "" }
 export default function DealershipForm() {
   const [form, setForm] = useState(EMPTY)
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState("")
 
   const set = (key) => (value) => setForm((f) => ({ ...f, [key]: value }))
 
@@ -37,10 +40,30 @@ export default function DealershipForm() {
     form.area &&
     form.investment
 
-  const onSubmit = (e) => {
+  // Lands in the store's Venu Shop › Leads screen, filed as a dealership application.
+  const onSubmit = async (e) => {
     e.preventDefault()
-    if (!isValid) return
-    setSubmitted(true)
+    if (!isValid || sending) return
+    setSending(true)
+    setError("")
+    try {
+      await submitLead(
+        "dealership",
+        {
+          name: form.name.trim(),
+          phone: form.phone,
+          pincode: form.pincode,
+          area_available: form.area,
+          investment: form.investment,
+        },
+        e.currentTarget.elements.company_website?.value
+      )
+      setSubmitted(true)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -70,6 +93,7 @@ export default function DealershipForm() {
             </div>
           ) : (
             <form onSubmit={onSubmit} noValidate className="mt-8">
+              <input {...honeypotProps} />
               {/* One grid for all five fields, so the two selects land under the
                   name/phone row rather than stretching the full width. */}
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -120,13 +144,19 @@ export default function DealershipForm() {
                 />
               </div>
 
+              {error && (
+                <p role="alert" className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </p>
+              )}
+
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <button
                   type="submit"
-                  disabled={!isValid}
+                  disabled={!isValid || sending}
                   className="h-13 rounded-sm bg-[#2b2b2b] px-12 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-400"
                 >
-                  Submit
+                  {sending ? "Sending…" : "Submit"}
                 </button>
                 <p className="text-xs leading-relaxed text-[#2b2b2b]/50 sm:max-w-sm">
                   By submitting you allow Venu Motors to contact you about this

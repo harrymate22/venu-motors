@@ -1,0 +1,173 @@
+{
+  "generated": "2026-09-11T05:07:15.133Z",
+  "site": "https://venumotors.in",
+  "currency": "INR",
+  "models": [
+    {
+      "slug": "thunder",
+      "name": "Venu Thunder",
+      "tagline": "Bold looks. Effortless range. Made for every Indian road.",
+      "description": "<ul><li><strong>Motor power:</strong> 250W</li><li><strong>Top speed:</strong> 25 km/h</li><li><strong>Range per charge:</strong> 60 km</li><li><strong>Battery:</strong> 60V 32Ah graphene</li><li><strong>Battery options:</strong> 48V / 60V / 72V</li><li><strong>Charging time:</strong> 8–10 hrs</li><li><strong>Brakes:</strong> Front disc, rear drum</li><li><strong>Tyres:</strong> Front 10&quot; – Rear 10&quot; tubeless</li><li><strong>Load capacity:</strong> 150 kg</li><li><strong>Gradeability:</strong> 15°</li><li><strong>Display:</strong> Digital LCD</li><li><strong>Ride modes:</strong> Eco / Normal / Power</li><li><strong>Reverse mode:</strong> Yes</li><li><strong>Water resistance:</strong> IP54</li><li><strong>Keyless entry:</strong> Yes</li><li><strong>Anti theft:</strong> Yes</li><li><strong>Central lock:</strong> Yes</li><li><strong>USB charging port:</strong> Yes</li><li><strong>Charger:</strong> Yes</li><li><strong>Portable battery:</strong> No</li><li><strong>Registration:</strong> Not required</li><li><strong>Driving licence:</strong> Not required</li></ul><p>Specs of the Venu Thunder · 60V 32Ah graphene · Range and speed may vary with road conditions, rider weight and battery type.</p><p><a href=\"https://venumotors.in/thunder\">Venu Thunder on venumotors.in</a></p>",
+      "image": "https://venumotors.in/Home-page/blue_thunder_scooty.png",
+      "colours": [
+        {
+          "id": "black",
+          "name": "Black"
+        },
+        {
+          "id": "blue",
+          "name": "Blue"
+        },
+        {
+          "id": "green",
+          "name": "Green"
+        },
+        {
+          "id": "gray-silver",
+          "name": "Gray / Silver"
+        },
+        {
+          "id": "red-mehrun",
+          "name": "Red / Mehrun"
+        }
+      ],
+      "packs": [
+        {
+          "id": "60v-32ah",
+          "label": "60V 32Ah",
+          "price": 45000
+        }
+      ]
+    },
+    {
+      "slug": "icon",
+      "name": "Venu Icon",
+      "tagline": "Clean lines, calm ride. The everyday electric for Indian families.",
+      "description": "<ul><li><strong>Motor power:</strong> 250W</li><li><strong>Top speed:</strong> 25 km/h</li><li><strong>Range per charge:</strong> 80 km</li><li><strong>Battery:</strong> 60V 42Ah graphene</li><li><strong>Battery options:</strong> 48V / 60V / 72V</li><li><strong>Charging time:</strong> 8–10 hrs</li><li><strong>Brakes:</strong> Front disc, rear drum</li><li><strong>Tyres:</strong> Front 12&quot; – Rear 12&quot; tubeless</li><li><strong>Load capacity:</strong> 150 kg</li><li><strong>Gradeability:</strong> 15°</li><li><strong>Display:</strong> Digital LCD</li><li><strong>Ride modes:</strong> Eco / Normal / Power</li><li><strong>Reverse mode:</strong> Yes</li><li><strong>Water resistance:</strong> IP54</li><li><strong>Keyless entry:</strong> Yes</li><li><strong>Anti theft:</strong> Yes</li><li><strong>Central lock:</strong> Yes</li><li><strong>USB charging port:</strong> Yes</li><li><strong>Charger:</strong> Yes</li><li><strong>Registration:</strong> Not required</li><li><strong>Driving licence:</strong> Not required</li></ul><p>Specs of the Venu Icon · 60V 42Ah graphene · Range and speed may vary with road conditions, rider weight and battery type.</p><p><a href=\"https://venumotors.in/icon\">Venu Icon on venumotors.in</a></p>",
+      "image": "https://venumotors.in/Home-page/icon_green_scooty.png",
+      "colours": [
+        {
+          "id": "aqua-green",
+          "name": "Aqua Green"
+        },
+        {
+          "id": "mat-blue",
+          "name": "Mat Blue"
+        },
+        {
+          "id": "cherry-red",
+          "name": "Cherry Red"
+        }
+      ],
+      "packs": [
+        {
+          "id": "60v-42ah",
+          "label": "60V 42Ah",
+          "price": 60000
+        }
+      ]
+    },
+    {
+      "slug": "efly",
+      "name": "Venu E-Fly",
+      "tagline": "Light on its feet. Built for the daily city run.",
+      "description": "<ul><li><strong>Motor power:</strong> 250W</li><li><strong>Top speed:</strong> 25 km/h</li><li><strong>Range per charge:</strong> 80 km</li><li><strong>Battery:</strong> 60V 42Ah graphene</li><li><strong>Battery options:</strong> 48V / 60V / 72V</li><li><strong>Charging time:</strong> 8–10 hrs</li><li><strong>Brakes:</strong> Front disc, rear drum</li><li><strong>Tyres:</strong> Front 12&quot; – Rear 12&quot; tubeless</li><li><strong>Load capacity:</strong> 150 kg</li><li><strong>Gradeability:</strong> 15°</li><li><strong>Display:</strong> Digital LCD</li><li><strong>Ride modes:</strong> Eco / Normal / Power</li><li><strong>Reverse mode:</strong> Yes</li><li><strong>Water resistance:</strong> IP54</li><li><strong>Keyless entry:</strong> Yes</li><li><strong>Anti theft:</strong> Yes</li><li><strong>Central lock:</strong> Yes</li><li><strong>USB charging port:</strong> Yes</li><li><strong>Charger:</strong> Yes</li><li><strong>Registration:</strong> Not required</li><li><strong>Driving licence:</strong> Not required</li></ul><p>Specs of the Venu E-Fly · 60V 42Ah graphene · Range and speed may vary with road conditions, rider weight and battery type.</p><p><a href=\"https://venumotors.in/efly\">Venu E-Fly on venumotors.in</a></p>",
+      "image": "https://venumotors.in/Home-page/green_efly_scooty.png",
+      "colours": [
+        {
+          "id": "aqua-green",
+          "name": "Aqua Green"
+        },
+        {
+          "id": "mat-blue",
+          "name": "Mat Blue"
+        },
+        {
+          "id": "cherry-red",
+          "name": "Cherry Red"
+        }
+      ],
+      "packs": [
+        {
+          "id": "60v-42ah",
+          "label": "60V 42Ah",
+          "price": 59000
+        }
+      ]
+    },
+    {
+      "slug": "efighter",
+      "name": "Venu E-Fighter",
+      "tagline": "Disc brakes at both ends, and a lithium-ion option that charges in under five hours.",
+      "description": "<ul><li><strong>Motor power:</strong> 250W</li><li><strong>Top speed:</strong> 25 km/h</li><li><strong>Range per charge:</strong> 60–100 km</li><li><strong>Battery:</strong> Graphene / Lithium-ion</li><li><strong>Battery options:</strong> 48V / 60V / 72V</li><li><strong>Charging time:</strong> 8–10 hrs</li><li><strong>Brakes:</strong> Front &amp; rear disc</li><li><strong>Tyres:</strong> Front 12&quot; – Rear 12&quot; tubeless</li><li><strong>Load capacity:</strong> 150 kg</li><li><strong>Gradeability:</strong> 15°</li><li><strong>Display:</strong> Digital LCD</li><li><strong>Ride modes:</strong> Eco / Normal / Power</li><li><strong>Reverse mode:</strong> Yes</li><li><strong>Water resistance:</strong> IP54</li><li><strong>Keyless entry:</strong> Yes</li><li><strong>Anti theft:</strong> Yes</li><li><strong>Central lock:</strong> Yes</li><li><strong>USB charging port:</strong> Yes</li><li><strong>Charger:</strong> Yes</li><li><strong>Registration:</strong> Not required</li><li><strong>Driving licence:</strong> Not required</li></ul><p>Specs of the Venu E-Fighter · Graphene ₹65,000 · Lithium-ion ₹82,000 · Range and speed may vary with road conditions, rider weight and battery type.</p><p><a href=\"https://venumotors.in/efighter\">Venu E-Fighter on venumotors.in</a></p>",
+      "image": "https://venumotors.in/Home-page/grey_efighter_scooty.png",
+      "colours": [
+        {
+          "id": "grey",
+          "name": "Grey"
+        },
+        {
+          "id": "cherry-red",
+          "name": "Cherry Red"
+        },
+        {
+          "id": "black",
+          "name": "Black"
+        }
+      ],
+      "packs": [
+        {
+          "id": "graphene",
+          "label": "Graphene",
+          "price": 65000
+        },
+        {
+          "id": "lithium-ion",
+          "label": "Lithium-ion",
+          "price": 82000
+        }
+      ]
+    },
+    {
+      "slug": "spot",
+      "name": "Venu Spot",
+      "tagline": "Sharp, sporty and street-ready. Made to be noticed.",
+      "description": "<ul><li><strong>Motor power:</strong> 250W</li><li><strong>Top speed:</strong> 25 km/h</li><li><strong>Range per charge:</strong> 60 km</li><li><strong>Battery:</strong> 48V 32Ah / 60V 32Ah graphene</li><li><strong>Battery options:</strong> 48V / 60V / 72V</li><li><strong>Charging time:</strong> 8–10 hrs</li><li><strong>Brakes:</strong> Front disc, rear drum</li><li><strong>Tyres:</strong> Front 10&quot; – Rear 10&quot; tubeless</li><li><strong>Load capacity:</strong> 150 kg</li><li><strong>Gradeability:</strong> 15°</li><li><strong>Display:</strong> Digital LCD</li><li><strong>Ride modes:</strong> Eco / Normal / Power</li><li><strong>Reverse mode:</strong> Yes</li><li><strong>Water resistance:</strong> IP54</li><li><strong>Keyless entry:</strong> Yes</li><li><strong>Anti theft:</strong> Yes</li><li><strong>Central lock:</strong> Yes</li><li><strong>USB charging port:</strong> Yes</li><li><strong>Charger:</strong> Yes</li><li><strong>Registration:</strong> Not required</li><li><strong>Driving licence:</strong> Not required</li></ul><p>Specs of the Venu Spot · 48V 32Ah ₹35,000 · 60V 32Ah ₹38,000 · Range and speed may vary with road conditions, rider weight and battery type.</p><p><a href=\"https://venumotors.in/spot\">Venu Spot on venumotors.in</a></p>",
+      "image": "https://venumotors.in/Home-page/spot_blue_scooty.png",
+      "colours": [
+        {
+          "id": "black",
+          "name": "Black"
+        },
+        {
+          "id": "blue",
+          "name": "Blue"
+        },
+        {
+          "id": "green",
+          "name": "Green"
+        },
+        {
+          "id": "gray-silver",
+          "name": "Gray / Silver"
+        },
+        {
+          "id": "red-mehrun",
+          "name": "Red / Mehrun"
+        }
+      ],
+      "packs": [
+        {
+          "id": "48v-32ah",
+          "label": "48V 32Ah",
+          "price": 35000
+        },
+        {
+          "id": "60v-32ah",
+          "label": "60V 32Ah",
+          "price": 38000
+        }
+      ]
+    }
+  ]
+}

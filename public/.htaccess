@@ -1,0 +1,18 @@
+# Single-page app: send every path that isn't a real file (e.g. /thunder,
+# /order-confirmed — where the shop returns buyers after paying) to index.html.
+# Used on Apache / LiteSpeed hosting such as Hostinger; other hosts ignore it.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# The shop re-reads the catalogue on every sync — never serve it stale.
+<Files "shop-catalog.json">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-cache"
+  </IfModule>
+</Files>

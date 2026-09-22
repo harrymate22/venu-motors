@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { useParams, Navigate, Link } from "react-router-dom"
+import { useParams, useSearchParams, Navigate, Link } from "react-router-dom"
 import { AnimatePresence, motion } from "motion/react"
-import { Info, Pencil, X, LocateFixed } from "lucide-react"
-import { BIKES } from "./bikes"
+import { Info, Pencil, X, LocateFixed, ShieldCheck } from "lucide-react"
+import { BIKES, CHARGE_TIME, inr, monthlyEmi, packId, packKwh, packLabel } from "./bikes"
 import { cn } from "@/lib/utils"
+import { buyNowUrl } from "@/lib/shop"
 
 const TABS = [
   { id: "colour", label: "Colour" },
@@ -87,7 +88,7 @@ function CityModal({ open, city, onSelect, onClose }) {
             <div className="mt-6 flex items-center justify-between rounded-xl bg-neutral-100 px-4 py-3">
               <div>
                 <p className="text-xs text-neutral-400">City name*</p>
-                <p className="font-medium text-neutral-900">{city}</p>
+                <p className="font-medium text-neutral-900">{city ?? "—"}</p>
               </div>
               <LocateFixed className="size-5 text-neutral-500" />
             </div>
@@ -116,31 +117,49 @@ function CityModal({ open, city, onSelect, onClose }) {
   )
 }
 
+/**
+ * One page from choice to checkout: colour, battery (where a model has more than
+ * one) and city, then Buy now hands that exact scooter to the shop's checkout at
+ * its own price. `?colour=Blue` preselects the finish a card's Buy Now came from.
+ */
 export default function BookingPage() {
   const { slug } = useParams()
+  const [searchParams] = useSearchParams()
   const bike = BIKES[slug]
   const [tab, setTab] = useState("colour")
-  // Open on a finish we have a stage shot for. Colours are listed in catalogue
-  // order, which can start on one we haven't photographed — landing there would
-  // show another colour's bike under this one's label.
-  const [colourName, setColourName] = useState(
-    () => (bike?.colours?.find((c) => c.bg) ?? bike?.colours?.[0])?.name
+  // Open on the colour the buyer came from, else a finish we have a stage shot
+  // for. Colours are listed in catalogue order, which can start on one we haven't
+  // photographed — landing there would show another colour's bike under its label.
+  const [colourName, setColourName] = useState(() => {
+    const asked = bike?.colours?.find((c) => c.name === searchParams.get("colour"))
+    return (asked ?? bike?.colours?.find((c) => c.bg) ?? bike?.colours?.[0])?.name
+  })
+  // Start on the cheapest pack — the "Starting at" price the buyer clicked through on.
+  const [packIndex, setPackIndex] = useState(() =>
+    (bike?.packs ?? []).reduce((best, p, i, all) => (p.price < all[best].price ? i : best), 0)
   )
-  const [city, setCity] = useState("Bengaluru")
+  // No default: the city goes on the order as the delivery city, so it should
+  // only ever be one the buyer actually picked.
+  const [city, setCity] = useState(null)
   const [cityOpen, setCityOpen] = useState(false)
 
   if (!bike) return <Navigate to="/" replace />
   // No published price → nothing to configure a booking against yet.
   if (!bike.price) return <Navigate to={`/${slug}`} replace />
 
-  const { name, price, booking, colours } = bike
+  const { name, booking, colours, packs } = bike
   const colour = colours.find((c) => c.name === colourName) ?? colours[0]
+  const pack = packs[packIndex] ?? packs[0]
+  // What Buy now charges: the chosen pack's own price, in full.
+  const price = inr(pack.price)
+  const emi = monthlyEmi(pack.price)
+  const checkoutUrl = buyNowUrl({ slug, colour: colour.name, pack, city })
   // All unique stage shots, kept mounted so colour swaps cross-fade without a reload flash.
   const stageImages = [...new Set(colours.map((c) => c.bg).filter(Boolean))]
   const stageImage = colour.bg ?? stageImages[0]
 
   const shareUrl = `https://wa.me/?text=${encodeURIComponent(
-    `I'm booking the ${name} in ${colour.name} — starting at ${price}!`
+    `I'm getting the ${name} in ${colour.name} for ${price}!`
   )}`
 
   return (
@@ -153,7 +172,7 @@ export default function BookingPage() {
             onClick={() => setCityOpen(true)}
             className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-neutral-800 shadow-sm ring-1 ring-black/5 transition hover:shadow"
           >
-            {city}
+            {city ?? "Select your city"}
             <Pencil className="size-3.5 text-neutral-500" />
           </button>
         </div>
@@ -237,6 +256,38 @@ export default function BookingPage() {
                       ))}
                     </div>
                   </div>
+
+                  {packs.length > 1 && (
+                    <div className="mt-10">
+                      <Heading label="Battery." tag="Pick your pack" />
+                      <div className="mt-6 space-y-3" role="radiogroup" aria-label="Battery">
+                        {packs.map((p, i) => (
+                          <button
+                            key={packId(p)}
+                            role="radio"
+                            aria-checked={i === packIndex}
+                            onClick={() => setPackIndex(i)}
+                            className={cn(
+                              "flex w-full items-center justify-between gap-4 rounded-2xl p-5 text-left transition-all",
+                              i === packIndex
+                                ? "bg-white ring-2 ring-neutral-900"
+                                : "bg-neutral-50 ring-1 ring-neutral-200/80 hover:ring-neutral-300"
+                            )}
+                          >
+                            <span>
+                              <span className="block font-semibold text-neutral-900">{packLabel(p)}</span>
+                              <span className="mt-0.5 block text-sm text-neutral-500">
+                                {p.volts && p.ah
+                                  ? `${packKwh(p).toFixed(2)} kWh ${bike.chemistry.toLowerCase()} pack`
+                                  : `${CHARGE_TIME[p.chemistry]} full charge`}
+                              </span>
+                            </span>
+                            <span className="shrink-0 font-semibold text-neutral-900">{inr(p.price)}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-6">
@@ -251,20 +302,31 @@ export default function BookingPage() {
                   )}
 
                   <div className="space-y-4">
+                    <SummaryRow label="Battery" value={packLabel(pack)} right="Included" />
                     <SummaryRow label="Range" value={booking?.range} right="Included" />
                     <SummaryRow label="Colour" value={colour.name} right="Included" />
-                    <SummaryRow label="Delivery city" value={city} right="Included" />
+                    <SummaryRow
+                      label="Delivery city"
+                      value={city ?? "Not picked yet — we'll confirm it when we call"}
+                      right={city ? "Included" : undefined}
+                    />
                   </div>
 
                   <hr className="border-neutral-200" />
 
                   <div className="flex items-end justify-between">
-                    <p className="font-semibold text-neutral-900">Ex-showroom price</p>
+                    <p className="font-semibold text-neutral-900">Total payable</p>
                     <div className="text-right">
                       <p className="text-lg font-semibold text-neutral-900">{price}</p>
-                      <p className="text-sm text-neutral-500">or {booking?.emi}</p>
+                      <p className="text-sm text-neutral-500">or {emi}</p>
                     </div>
                   </div>
+
+                  <p className="flex items-start gap-2 text-sm text-neutral-500">
+                    <ShieldCheck className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+                    Buy now opens our secure checkout — pay by UPI, card or net banking.
+                    You get an order confirmation by email straight away.
+                  </p>
 
                   <a
                     href={shareUrl}
@@ -287,11 +349,14 @@ export default function BookingPage() {
               {price}
               <Info className="size-3.5 text-neutral-400" />
             </p>
-            <p className="text-sm text-neutral-500">or {booking?.emi}</p>
+            <p className="text-sm text-neutral-500">or {emi}</p>
           </div>
-          <button className="rounded-full bg-[#D42A2A] px-10 py-4 text-base font-semibold text-white shadow-sm shadow-red-900/10 transition-colors hover:bg-[#b91f1f]">
-            Book for {booking?.bookingAmount}
-          </button>
+          <a
+            href={checkoutUrl}
+            className="rounded-full bg-[#D42A2A] px-10 py-4 text-base font-semibold text-white shadow-sm shadow-red-900/10 transition-colors hover:bg-[#b91f1f]"
+          >
+            Buy now
+          </a>
         </div>
       </div>
 

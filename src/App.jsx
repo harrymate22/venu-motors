@@ -15,6 +15,7 @@ const DealershipPage = lazy(() => import("@/pages/dealership/DealershipPage"))
 const SavingsPage = lazy(() => import("@/pages/savings/SavingsPage"))
 const BikePage = lazy(() => import("@/pages/explore/BikePage"))
 const BookingPage = lazy(() => import("@/pages/explore/BookingPage"))
+const OrderConfirmedPage = lazy(() => import("@/pages/explore/OrderConfirmedPage"))
 
 function App() {
   return (
@@ -34,6 +35,15 @@ function App() {
           element={
             <Suspense fallback={<RouteFallback />}>
               <SavingsPage />
+            </Suspense>
+          }
+        />
+        {/* The shop (shop.venumotors.in) sends buyers here after checkout */}
+        <Route
+          path="order-confirmed"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <OrderConfirmedPage />
             </Suspense>
           }
         />

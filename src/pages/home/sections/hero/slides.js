@@ -29,15 +29,15 @@
 /** @type {HeroSlide[]} */
 export const HERO_SLIDES = [
   {
-    id: "s1-pro",
+    id: "e-fighter",
     image: "/Home-page/hero_banner.png",
-    alt: "Venu S1 Pro electric scooter",
+    alt: "Venu E-Fighter electric scooter",
     eyebrow: "INTRODUCING",
-    title: ["Venu S1 Pro 5.2 kWh"],
+    title: ["Venu E-Fighter"],
     description: [
-      "Powered by India's most advanced cell, 4680 Bharat Cell.",
-      "320 kms of range for every Indian.",
-      "At an introductory pricing of ₹1,29,999.",
+      "Powered by a choice of Graphene or Lithium-ion battery.",
+      "60-100 kms of range for every Indian.",
+      "At an introductory pricing of ₹65,000.",
     ],
     buttons: [
       { label: "Buy Now", variant: "primary" },
@@ -45,14 +45,14 @@ export const HERO_SLIDES = [
     ],
   },
   {
-    id: "roadster",
+    id: "e-fighter-lithium",
     image: "/Home-page/hero_banner1.png",
-    alt: "Venu Roadster X+ electric motorcycle",
-    title: ["India's longest Range Roadster", "now at ₹1,69,999"],
+    alt: "Venu E-Fighter Lithium-ion electric scooter",
+    title: ["Venu E-Fighter Lithium-ion", "now at ₹82,000"],
     buttons: [{ label: "Explore More", variant: "dark" }],
     specs: {
-      name: "Venu Roadster X+ 9.1 kWh",
-      items: ["Up to 500 Kms Range", "11 kWh Peak Power", "125 Kmph Top Speed"],
+      name: "Venu E-Fighter Lithium-ion",
+      items: ["60-100 km Range", "Dual Disc Brakes", "Under 5 hrs Charge"],
     },
     footnote: "*T&C Apply",
   },

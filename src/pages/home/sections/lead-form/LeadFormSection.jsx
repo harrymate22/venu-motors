@@ -1,8 +1,11 @@
 import { useState } from "react"
 import { LocateFixed, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { BIKE_LIST } from "@/pages/explore/bikes"
+import { honeypotProps, submitLead } from "@/lib/shop"
 
-const MODELS = ["Thunder", "S1 Pro"]
+/** Every model in the catalogue, by its short name ("Thunder", "E-Fly", …). */
+const MODELS = BIKE_LIST.map((bike) => bike.shortName)
 
 const inputClass =
   "w-full rounded-xl bg-neutral-100 px-4 py-3.5 text-neutral-900 placeholder:text-neutral-400 outline-none transition focus:ring-2 focus:ring-emerald-500/40"
@@ -10,15 +13,31 @@ const inputClass =
 export default function LeadFormSection() {
   const [form, setForm] = useState({ name: "", phone: "", pin: "", model: "" })
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState("")
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
   const isValid =
     form.name.trim() && form.phone.trim().length >= 10 && form.pin.trim() && form.model
 
-  const onSubmit = (e) => {
+  // Lands in the store's Venu Shop › Leads screen and the team's inbox.
+  const onSubmit = async (e) => {
     e.preventDefault()
-    if (!isValid) return
-    setSubmitted(true)
+    if (!isValid || sending) return
+    setSending(true)
+    setError("")
+    try {
+      await submitLead(
+        "offers",
+        { name: form.name.trim(), phone: form.phone, pin: form.pin.trim(), model: `Venu ${form.model}` },
+        e.currentTarget.elements.company_website?.value
+      )
+      setSubmitted(true)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -41,6 +60,7 @@ export default function LeadFormSection() {
               </div>
             ) : (
               <form onSubmit={onSubmit} className="mt-8 space-y-4">
+                <input {...honeypotProps} />
                 <input
                   className={inputClass}
                   placeholder="Name *"
@@ -94,12 +114,18 @@ export default function LeadFormSection() {
                   ))}
                 </div>
 
+                {error && (
+                  <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {error}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  disabled={!isValid}
+                  disabled={!isValid || sending}
                   className="w-full rounded-full bg-neutral-900 py-3.5 font-semibold text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-400"
                 >
-                  Submit
+                  {sending ? "Sending…" : "Submit"}
                 </button>
 
                 <p className="text-center text-xs leading-relaxed text-neutral-400">
