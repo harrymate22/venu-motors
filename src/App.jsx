@@ -12,6 +12,7 @@ import RouteFallback from "@/components/layout/RouteFallback"
 const HomePage = lazy(() => import("@/pages/home/HomePage"))
 const AboutPage = lazy(() => import("@/pages/about/AboutPage"))
 const DealershipPage = lazy(() => import("@/pages/dealership/DealershipPage"))
+const DealersPage = lazy(() => import("@/pages/dealers/DealersPage"))
 const SavingsPage = lazy(() => import("@/pages/savings/SavingsPage"))
 const BikePage = lazy(() => import("@/pages/explore/BikePage"))
 const BookingPage = lazy(() => import("@/pages/explore/BookingPage"))
@@ -25,6 +26,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="about-us" element={<AboutPage />} />
           <Route path="dealership" element={<DealershipPage />} />
+          <Route path="locate-venu-dealer" element={<DealersPage />} />
           {/* Catch-all bike slug — keep last so static routes win */}
           <Route path=":slug" element={<BikePage />} />
         </Route>

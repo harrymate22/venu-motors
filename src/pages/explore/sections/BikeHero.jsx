@@ -9,7 +9,7 @@ const rise = (delay = 0) => ({
 })
 
 export default function BikeHero({ bike }) {
-  const { name, eyebrow, tagline, price, priceLabel, image, heroStats, specNote } = bike
+  const { name, eyebrow, price, image, heroLines, heroStats, specNote } = bike
 
   // No published price yet → send buyers to the enquiry form instead of the
   // configurator, which has no figure to build a booking around.
@@ -37,22 +37,19 @@ export default function BikeHero({ bike }) {
         >
           {name}
         </motion.h1>
-        <motion.p
-          {...rise(0.16)}
-          className="mt-5 max-w-md text-base leading-relaxed text-white/85 md:text-lg"
-        >
-          {tagline}
-        </motion.p>
-        <motion.p {...rise(0.2)} className="mt-4 text-lg text-white/90">
-          {price ? (
-            <>
-              Starting at <span className="text-2xl font-semibold">{price}</span>
-              <span className="text-sm text-white/60"> on-road</span>
-            </>
-          ) : (
-            <span className="text-2xl font-semibold">{priceLabel}</span>
-          )}
-        </motion.p>
+        {/* Three claims, one per line — what powers it, how far it goes, what it
+            costs. They carry the price, so there's no separate price paragraph. */}
+        <div className="mt-6 max-w-lg space-y-1.5">
+          {heroLines.map((line, i) => (
+            <motion.p
+              key={line}
+              {...rise(0.16 + i * 0.06)}
+              className="text-base leading-relaxed text-white/85 md:text-lg"
+            >
+              {line}
+            </motion.p>
+          ))}
+        </div>
 
         <motion.div {...rise(0.28)} className="mt-8 flex flex-wrap items-center gap-4">
           <Link

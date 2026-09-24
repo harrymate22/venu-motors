@@ -26,6 +26,7 @@ export const E_SCOOTERS = [
 export const MENU_LINKS = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about-us" },
+  { label: "Find a Dealer", href: "/locate-venu-dealer" },
   { label: "Latest News", href: "/#news" },
   { label: "Happy Stories", href: "/#stories" },
   { label: "Contact Us", href: "/#enquire" },

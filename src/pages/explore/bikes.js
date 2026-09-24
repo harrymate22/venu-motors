@@ -101,6 +101,11 @@ export const CHARGE_TIME = {
   "Lithium-ion": "4–5 hrs",
 }
 
+/** Slowest-charging first, so the quickest chemistry sorts to the end. */
+const CHARGE_ORDER = ["Graphene", "Lithium-ion"]
+const quickestChemistry = (chemistries) =>
+  [...chemistries].sort((a, b) => CHARGE_ORDER.indexOf(a) - CHARGE_ORDER.indexOf(b)).at(-1)
+
 /**
  * Brake packages. `short` is the bento card title, `label` the spec-table value,
  * and `front`/`rear` the rows in the mechanical breakdown.
@@ -585,6 +590,24 @@ function sharedSpecBike({
       ? packs.map((p) => `${packLabel(p)} ${inr(p.price)}`).join(" · ")
       : batteryValue
 
+  // The hero pitch: three claims in the order a buyer asks for them — what
+  // powers it, how far it goes, what it costs. Built from the same figures as
+  // the spec table, so the headline can't drift from the specs underneath it.
+  const heroLines = [
+    chemistries.length > 1
+      ? // Sold in either chemistry. Both charge times are named, so this line
+        // can't read as contradicting the charging-time stat beside it — that
+        // stat quotes the cheapest pack, which isn't the quickest one.
+        `${chemistryLabel} — a full charge in ${chargeTime}, or ${CHARGE_TIME[quickestChemistry(chemistries)]} on the ${quickestChemistry(chemistries).toLowerCase()} pack.`
+      : `Powered by ${chemistryLabel.toLowerCase()} — ${battery}, charged in ${chargeTime}.`,
+    `${rangeText} of range on a single charge.`,
+    !headline
+      ? "Price on request — talk to your nearest dealer."
+      : packs.length > 1
+        ? `${packs.map((p) => `${packLabel(p)} at ${inr(p.price)}`).join(", ")}.`
+        : `At ${inr(headline.price)} on-road.`,
+  ]
+
   return {
     slug,
     name,
@@ -609,6 +632,7 @@ function sharedSpecBike({
     ...(packs ? { packs } : {}),
     ...(rangeKm ? { rangeKm } : {}),
 
+    heroLines,
     heroStats: heroStats({ rangeText, chargeTime }),
     specNote: `Specs of the ${name} · ${packNote} · ${SPEC_DISCLAIMER}`,
 
