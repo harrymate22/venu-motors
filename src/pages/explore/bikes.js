@@ -163,6 +163,8 @@ export const FINISHES = {
   "Mat Blue": { hex: "#2E4A7D", accent: "#1D4ED8" },
   "Cherry Red": { hex: "#B3121F", accent: "#BE123C" },
   Grey: { hex: "#8A8F94", accent: "#6B7280" },
+  // Readable slate accent — pure white would vanish against the card.
+  White: { hex: "#FFFFFF", accent: "#64748B" },
 }
 
 /** Spot and Thunder share one catalogue palette; Icon and E-Fly share another. */
@@ -832,11 +834,20 @@ export const BIKES = {
    * ends, and the lithium option is the only pack in the range that charges in
    * under five hours.
    *
-   * PENDING PHOTOGRAPHY: none of the four `efighter` assets referenced below
-   * exist under /public yet, so this page renders with missing images until they
-   * land — and now that the model has a price, so does its configurator at
-   * /efighter/book. The paths follow the range's naming, so dropping the files
-   * in is all that's needed; nothing here has to change.
+   * PHOTOGRAPHY: the studio shots arrived named `e-fighter-<colour>` under
+   * /explore-pages rather than following the `<colour>_<model>_scooty` naming
+   * the rest of the range uses, and are referenced verbatim here rather than
+   * renamed — same call as `White_Spot_Scooty.png` on the Spot below.
+   *
+   * White is listed on the strength of the studio shot and the team confirming
+   * it, not the poster — the poster's "colours available" panel names only Grey,
+   * Cherry Red and Black, though it photographs the white bike as its hero. It
+   * sits last so the three the poster does list stay in the poster's order.
+   *
+   * Black's card uses `e-fighter-black.png`, which is a render of a black *Spot*
+   * — different bodywork, and SPOT signage on the studio wall behind it. That
+   * was raised and the file wired anyway, on request. Drop a real black
+   * E-Fighter shot in at that path and the card corrects itself.
    */
   efighter: sharedSpecBike({
     slug: "efighter",
@@ -849,16 +860,32 @@ export const BIKES = {
     ],
     brakes: BRAKES_DUAL_DISC,
     wheelSize: '12"',
-    image: "/explore-pages/efighter_bike.png",
-    showcaseImage: "/Home-page/black_efighter_scooty.png",
+    image: "/explore-pages/e-fighter-white.png",
+    showcaseImage: "/explore-pages/e-fighter-red.png",
     showcaseSubject: "Venu E-Fighter",
     stylingNote: "Stylish graphics with a premium finish",
-    finishes: ["Grey", "Cherry Red", "Black"],
+    finishes: ["Grey", "Cherry Red", "Black", "White"],
     shots: {
-      Grey: "/Home-page/grey_efighter_scooty.png",
-      "Cherry Red": "/Home-page/red_efighter_scooty.png",
-      Black: "/Home-page/black_efighter_scooty.png",
+      Grey: "/explore-pages/e-fighter-gray.png",
+      "Cherry Red": "/explore-pages/e-fighter-red.png",
+      Black: "/explore-pages/e-fighter-black.png",
+      White: "/explore-pages/e-fighter-white.png",
     },
+    // Only two finishes are shot, so the bento and service cards are given all
+    // three photos explicitly rather than cycling the same pair around six slots.
+    featureShots: [
+      "/explore-pages/e-fighter-red.png",
+      "/explore-pages/e-fighter-gray.png",
+      "/explore-pages/e-fighter-white.png",
+      "/explore-pages/e-fighter-gray.png",
+      "/explore-pages/e-fighter-red.png",
+      "/explore-pages/e-fighter-white.png",
+    ],
+    serviceShots: [
+      "/explore-pages/e-fighter-white.png",
+      "/explore-pages/e-fighter-gray.png",
+      "/explore-pages/e-fighter-red.png",
+    ],
     extraHighlights: ["LED tail lamp", "Comfortable seat for long rides"],
   }),
 

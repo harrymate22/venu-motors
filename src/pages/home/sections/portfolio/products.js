@@ -104,9 +104,8 @@ const EFLY_PRODUCTS = colourCards({
  * ₹82,000), so the card quotes the graphene price and the graphene charging
  * time. Taglines stay off both, since a card can't say which pack you'd pick.
  *
- * PENDING PHOTOGRAPHY: the three `efighter` shots these cards point at don't
- * exist under /public/Home-page yet (see the note on the entry in bikes.js), so
- * this group renders with missing images until they land.
+ * Black's photo is a black Spot render rather than an E-Fighter — raised and
+ * wired anyway, on request; see the note on the entry in bikes.js.
  */
 const EFIGHTER_PRODUCTS = colourCards({
   modelId: "efighter",
@@ -114,6 +113,7 @@ const EFIGHTER_PRODUCTS = colourCards({
     Grey: "Understated finish, disc brakes at both ends",
     "Cherry Red": "Disc brakes front and rear, bold as they come",
     Black: "Two battery options, one sharp silhouette",
+    White: "Sharp lines, lithium-ion quick charge",
   },
 })
 
