@@ -29,7 +29,7 @@ export default function LeadFormSection() {
     try {
       await submitLead(
         "offers",
-        { name: form.name.trim(), phone: form.phone, pin: form.pin.trim(), model: `Venu ${form.model}` },
+        { name: form.name.trim(), phone: form.phone, pin: form.pin.trim(), model: form.model },
         e.currentTarget.elements.company_website?.value
       )
       setSubmitted(true)
@@ -55,7 +55,7 @@ export default function LeadFormSection() {
                 <Check className="mt-0.5 size-5 shrink-0" />
                 <p className="text-sm">
                   Thanks, {form.name.split(" ")[0]}! Our team will reach out to you
-                  shortly with the best offers on the Venu {form.model}.
+                  shortly with the best offers on the {form.model}.
                 </p>
               </div>
             ) : (
@@ -143,7 +143,7 @@ export default function LeadFormSection() {
           <div className="relative hidden bg-white lg:block">
             <img
               src="/Home-page/connectwithus.png"
-              alt="Venu Thunder"
+              alt="Thunder"
               className="absolute inset-0 size-full origin-top scale-[1.4] object-contain object-center"
             />
           </div>

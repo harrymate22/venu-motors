@@ -4,7 +4,7 @@ const EXPLORE = [
   { label: "Thunder — Red", href: "#" },
   { label: "Thunder — Blue", href: "#" },
   { label: "Thunder — Grey", href: "#" },
-  { label: "Venu S1 Pro", href: "#" },
+  { label: "S1 Pro", href: "#" },
 ]
 
 const COMPANY = [

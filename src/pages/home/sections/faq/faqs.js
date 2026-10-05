@@ -1,5 +1,5 @@
 /**
- * Frequently asked questions — written for the Venu Thunder.
+ * Frequently asked questions — written for the Thunder.
  * (venumotors.com has no FAQ block yet, so these are tailored from its specs.
  *  Figures follow the sales team's Aug 2026 price list, same source as bikes.js:
  *  ₹45,000 on-road, 60V 32Ah, 60 km range, 8–10 hr home charge — and the
@@ -15,13 +15,13 @@
 export const FAQS = [
   {
     id: "price",
-    question: "How much does the Venu Thunder cost?",
+    question: "How much does the Thunder cost?",
     answer:
-      "The Venu Thunder is priced at ₹45,000 on-road and is available in five finishes. Visit your nearest Venu Motors dealership for the latest offers and to book a test ride.",
+      "The Thunder is priced at ₹45,000 on-road and is available in five finishes. Visit your nearest Venu Motors dealership for the latest offers and to book a test ride.",
   },
   {
     id: "charge",
-    question: "How do I charge the Venu Thunder?",
+    question: "How do I charge the Thunder?",
     answer:
       "Charging is as simple as charging your phone. Just plug the Thunder into any standard 5-amp home socket — a full charge takes about 8 to 10 hours, and no special charging setup is required.",
   },
@@ -29,13 +29,13 @@ export const FAQS = [
     id: "range",
     question: "What is the range on a single charge?",
     answer:
-      "The Venu Thunder's 60V 32Ah graphene pack delivers 60 km of real-world range on a single full charge. If you need more, the Venu Icon and E-Fly run a 60V 42Ah pack that's good for 80 km.",
+      "The Thunder's 60V 32Ah graphene pack delivers 60 km of real-world range on a single full charge. If you need more, the Icon and E-Fly run a 60V 42Ah pack that's good for 80 km.",
   },
   {
     id: "licence",
     question: "Do I need a driving licence or registration to ride it?",
     answer:
-      "No. The Venu Thunder is a low-speed electric scooter, so it requires no registration and no driving licence — making it accessible to every member of the family.",
+      "No. The Thunder is a low-speed electric scooter, so it requires no registration and no driving licence — making it accessible to every member of the family.",
   },
   {
     id: "apartment",
@@ -47,7 +47,7 @@ export const FAQS = [
     id: "colours",
     question: "What colours are available?",
     answer:
-      "The Venu Thunder comes in five striking finishes — Black, Blue, Green, Gray / Silver and Red / Mehrun — each with bold styling and a premium LED headlamp.",
+      "The Thunder comes in five striking finishes — Black, Blue, Green, Gray / Silver and Red / Mehrun — each with bold styling and a premium LED headlamp.",
   },
   {
     id: "roads",
@@ -57,7 +57,7 @@ export const FAQS = [
   },
   {
     id: "rain",
-    question: "Can the Venu Thunder be used in the rain?",
+    question: "Can the Thunder be used in the rain?",
     answer:
       "Yes. The Thunder is designed to handle everyday Indian weather, so you can ride with confidence through both the heat and the monsoon.",
   },

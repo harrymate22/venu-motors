@@ -29,7 +29,7 @@ export default function EmiSection() {
           </h2>
           <p className="mt-5 max-w-md text-base leading-relaxed text-neutral-600 md:text-lg">
             Use our EMI calculator to estimate your monthly payments and find the
-            Venu Thunder that fits your budget.
+            Thunder that fits your budget.
           </p>
           <Button
             asChild

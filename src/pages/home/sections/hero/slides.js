@@ -31,9 +31,9 @@ export const HERO_SLIDES = [
   {
     id: "e-fighter",
     image: "/Home-page/hero_banner.png",
-    alt: "Venu E-Fighter electric scooter",
+    alt: "E-Fighter electric scooter",
     eyebrow: "INTRODUCING",
-    title: ["Venu E-Fighter"],
+    title: ["E-Fighter"],
     description: [
       "Powered by a choice of Graphene or Lithium-ion battery.",
       "60-100 kms of range for every Indian.",
@@ -47,11 +47,11 @@ export const HERO_SLIDES = [
   {
     id: "e-fighter-lithium",
     image: "/Home-page/hero_banner1.png",
-    alt: "Venu E-Fighter Lithium-ion electric scooter",
-    title: ["Venu E-Fighter Lithium-ion", "now at ₹82,000"],
+    alt: "E-Fighter Lithium-ion electric scooter",
+    title: ["E-Fighter Lithium-ion", "now at ₹82,000"],
     buttons: [{ label: "Explore More", variant: "dark" }],
     specs: {
-      name: "Venu E-Fighter Lithium-ion",
+      name: "E-Fighter Lithium-ion",
       items: ["60-100 km Range", "Dual Disc Brakes", "Under 5 hrs Charge"],
     },
     footnote: "*T&C Apply",

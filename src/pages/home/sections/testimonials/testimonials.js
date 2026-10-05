@@ -21,7 +21,7 @@ export const TESTIMONIALS = [
     name: "Rahul Verma",
     location: "Bengaluru",
     quote:
-      "Switching to the Venu Thunder was the best decision — my daily commute now costs almost nothing.",
+      "Switching to the Thunder was the best decision — my daily commute now costs almost nothing.",
   },
   {
     id: "t2",

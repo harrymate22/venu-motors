@@ -1,7 +1,7 @@
 import { BIKES } from "@/pages/explore/bikes"
 
 /**
- * Portfolio models shown in the "Meet the Venu …" home section.
+ * Portfolio models shown in the "Meet the …" home section.
  *
  * The section renders one model group at a time; the header toggle swaps between
  * them (Thunder / Icon / E-Fly / E-Fighter / Spot) and the heading follows the
@@ -20,7 +20,7 @@ import { BIKES } from "@/pages/explore/bikes"
  *
  * @typedef {Object} Product
  * @property {string}    id
- * @property {string}    model       e.g. "Venu Thunder"
+ * @property {string}    model       e.g. "Thunder"
  * @property {string}    slug        Explore route, e.g. "thunder" → /thunder
  * @property {string}    ctaLabel    Primary CTA text
  * @property {string}    secondaryLabel
@@ -140,31 +140,31 @@ export const MODELS = [
   {
     id: "thunder",
     label: "Thunder",
-    heading: "Meet the Venu Thunder",
+    heading: "Meet the Thunder",
     products: THUNDER_PRODUCTS,
   },
   {
     id: "icon",
     label: "Icon",
-    heading: "Meet the Venu Icon",
+    heading: "Meet the Icon",
     products: ICON_PRODUCTS,
   },
   {
     id: "efly",
     label: "E-Fly",
-    heading: "Meet the Venu E-Fly",
+    heading: "Meet the E-Fly",
     products: EFLY_PRODUCTS,
   },
   {
     id: "efighter",
     label: "E-Fighter",
-    heading: "Meet the Venu E-Fighter",
+    heading: "Meet the E-Fighter",
     products: EFIGHTER_PRODUCTS,
   },
   {
     id: "spot",
     label: "Spot",
-    heading: "Meet the Venu Spot",
+    heading: "Meet the Spot",
     products: SPOT_PRODUCTS,
   },
 ]

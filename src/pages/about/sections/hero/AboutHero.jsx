@@ -119,7 +119,7 @@ export default function AboutHero() {
         </motion.div>
 
         <p className="relative pb-6 pr-6 text-right text-[11px] text-white/45 md:pr-10">
-          *Venu Thunder, on a full charge under standard riding conditions
+          *Thunder, on a full charge under standard riding conditions
         </p>
       </div>
     </section>

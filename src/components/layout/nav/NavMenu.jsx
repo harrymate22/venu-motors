@@ -74,7 +74,7 @@ export default function NavMenu({ open, onClose }) {
                     <div className="overflow-hidden rounded-2xl bg-white/[0.04] ring-1 ring-white/10 transition-all group-hover:ring-white/30">
                       <img
                         src={bike.image}
-                        alt={`Venu ${bike.name}`}
+                        alt={bike.name}
                         className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>

@@ -17,8 +17,7 @@ export default function ProductCard({ product }) {
     ctaLabel,
     secondaryLabel,
   } = product
-  const shortName = model.replace(/^Venu\s/, "") // "Thunder" / "Icon"
-  const primaryLabel = ctaLabel ?? `Explore ${shortName}`
+  const primaryLabel = ctaLabel ?? `Explore ${model}`
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-white text-neutral-900 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">

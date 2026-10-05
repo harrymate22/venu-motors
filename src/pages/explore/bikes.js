@@ -550,7 +550,9 @@ function sharedSpecBike({
   extraKeyFeatures,
   extraHighlights,
 }) {
-  const short = shortName ?? name.replace(/^Venu\s/, "")
+  // Model names carry no brand prefix, so `shortName` is just the name unless a
+  // model overrides it — the hook stays for a future name too long for a button.
+  const short = shortName ?? name
 
   // Only finishes we can actually show get a card; the rest still reach the
   // configurator, which tints a swatch rather than needing a photo.
@@ -733,7 +735,7 @@ export const BIKES = {
    */
   thunder: sharedSpecBike({
     slug: "thunder",
-    name: "Venu Thunder",
+    name: "Thunder",
     eyebrow: "POWER · PERFORMANCE · ELECTRIC",
     tagline: "Bold looks. Effortless range. Made for every Indian road.",
     packs: [{ volts: 60, ah: 32, price: 45000 }],
@@ -742,7 +744,7 @@ export const BIKES = {
     wheelSize: '10"',
     image: "/explore-pages/thunder_bike.png",
     showcaseImage: "/explore-pages/thunder_bike_x1.png",
-    showcaseSubject: "Venu Thunder X1",
+    showcaseSubject: "Thunder X1",
     stylingNote: "Head-turning Thunder styling",
     finishes: SPORT_FINISHES,
     shots: {
@@ -785,7 +787,7 @@ export const BIKES = {
   /** Icon — Cherry Red still awaits its studio shot. Catalogue styles it "i-CON". */
   icon: sharedSpecBike({
     slug: "icon",
-    name: "Venu Icon",
+    name: "Icon",
     eyebrow: "SMART · EFFICIENT · ELECTRIC",
     tagline: "Clean lines, calm ride. The everyday electric for Indian families.",
     packs: [{ volts: 60, ah: 42, price: 60000 }],
@@ -794,7 +796,7 @@ export const BIKES = {
     wheelSize: '12"',
     image: "/explore-pages/icon_bike.png",
     showcaseImage: "/Home-page/icon_blue_scooty.png",
-    showcaseSubject: "Venu Icon",
+    showcaseSubject: "Icon",
     stylingNote: "Smooth, understated Icon styling",
     finishes: FAMILY_FINISHES,
     shots: {
@@ -806,7 +808,7 @@ export const BIKES = {
   /** E-Fly — every catalogue finish has its own shot. */
   efly: sharedSpecBike({
     slug: "efly",
-    name: "Venu E-Fly",
+    name: "E-Fly",
     eyebrow: "SMART · EFFICIENT · ELECTRIC",
     tagline: "Light on its feet. Built for the daily city run.",
     packs: [{ volts: 60, ah: 42, price: 59000 }],
@@ -815,7 +817,7 @@ export const BIKES = {
     wheelSize: '12"',
     image: "/explore-pages/efly_bike.png",
     showcaseImage: "/Home-page/red_efly_scooty.png",
-    showcaseSubject: "Venu E-Fly",
+    showcaseSubject: "E-Fly",
     stylingNote: "Nimble, city-ready E-Fly styling",
     finishes: FAMILY_FINISHES,
     shots: {
@@ -851,7 +853,7 @@ export const BIKES = {
    */
   efighter: sharedSpecBike({
     slug: "efighter",
-    name: "Venu E-Fighter",
+    name: "E-Fighter",
     eyebrow: "SMART · EFFICIENT · ELECTRIC",
     tagline: "Disc brakes at both ends, and a lithium-ion option that charges in under five hours.",
     packs: [
@@ -862,7 +864,7 @@ export const BIKES = {
     wheelSize: '12"',
     image: "/explore-pages/e-fighter-white.png",
     showcaseImage: "/explore-pages/e-fighter-red.png",
-    showcaseSubject: "Venu E-Fighter",
+    showcaseSubject: "E-Fighter",
     stylingNote: "Stylish graphics with a premium finish",
     finishes: ["Grey", "Cherry Red", "Black", "White"],
     shots: {
@@ -896,7 +898,7 @@ export const BIKES = {
    */
   spot: sharedSpecBike({
     slug: "spot",
-    name: "Venu Spot",
+    name: "Spot",
     eyebrow: "SMART · STYLISH · ELECTRIC",
     tagline: "Sharp, sporty and street-ready. Made to be noticed.",
     packs: [
@@ -908,7 +910,7 @@ export const BIKES = {
     wheelSize: '10"',
     image: "/explore-pages/spot_bike.png",
     showcaseImage: "/Home-page/red_spot_scooty.png",
-    showcaseSubject: "Venu Spot",
+    showcaseSubject: "Spot",
     stylingNote: "Sharp, sporty Spot styling",
     finishes: SPORT_FINISHES,
     shots: {
