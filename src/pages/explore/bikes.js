@@ -39,6 +39,15 @@
 export const inr = (value) => `₹${value.toLocaleString("en-IN")}`
 
 /**
+ * The transparent cut-out of a studio shot, for wherever the bike has to sit on
+ * one of our own backgrounds rather than carry its photographed one — the
+ * configurator stage, today. Every file under /public/cutouts is named after the
+ * shot it was cut from, so the pairing is derived rather than kept as a second
+ * map that could drift out of step with `shots`.
+ */
+const cutout = (shot) => `/cutouts/${shot.split("/").pop()}`
+
+/**
  * "Gray / Silver" → "gray-silver", so catalogue colour names are safe as ids.
  * The shop checkout finds a scooter by these ids (see src/lib/shop.js), so the
  * same function builds them on both sides.
@@ -507,18 +516,19 @@ function sharedFeatureTabs({
  * there's more than one they're all spelled out in `specNote`.
  *
  * COLOURS come from `finishes` (the catalogue's list, in its order) and `shots`
- * (the studio photography we actually have). Every listed finish reaches the
- * configurator through `colours`; only the ones with a shot get a card in the
- * colour carousel through `variants`, so a card can never show blue paint under
- * a "Red" label. `stageShots` overrides the configurator's backdrop where a
- * model has dedicated stage photography.
+ * (the studio photography we actually have). A finish with no shot is recorded
+ * here but never shown: it is left out of `colours`, out of `variants` and out
+ * of every "available in N colours" count, because a swatch with no photo behind
+ * it can only land the visitor on some other colour's bike. Add its shot and it
+ * appears everywhere at once. The configurator stage uses the cut-out of each
+ * shot, so a model needs no separate backdrop photography.
  *
  * @param {{ slug: string, name: string, shortName?: string, eyebrow: string,
  *   tagline: string, packs?: Pack[], rangeKm?: number, chemistry?: string,
  *   brakes: object, wheelSize: string, image: string,
  *   showcaseImage: string, showcaseSubject: string, stylingNote: string,
  *   finishes: string[], shots?: Record<string, string>,
- *   stageShots?: Record<string, string>, featureShots?: string[],
+ *   featureShots?: string[],
  *   serviceShots?: string[], suspension?: SpecRow[], tyreNumber?: string,
  *   kerbWeight?: string, warranty?: Stat[], extraKeyFeatures?: SpecRow[],
  *   extraHighlights?: string[] }} config
@@ -540,7 +550,6 @@ function sharedSpecBike({
   stylingNote,
   finishes,
   shots = {},
-  stageShots = {},
   featureShots,
   serviceShots,
   suspension,
@@ -554,10 +563,13 @@ function sharedSpecBike({
   // model overrides it — the hook stays for a future name too long for a button.
   const short = shortName ?? name
 
-  // Only finishes we can actually show get a card; the rest still reach the
-  // configurator, which tints a swatch rather than needing a photo.
-  const shotFinishes = finishes.filter((colour) => shots[colour])
-  const gallery = shotFinishes.map((colour) => shots[colour])
+  // Only finishes we can actually show reach the page. `finishes` stays the
+  // catalogue's full list so the record of what's sold lives in one place,
+  // but a colour with no studio shot is left out of the configurator, the
+  // colour carousel and every count — rather than offering a swatch that
+  // lands the visitor on some other colour's bike.
+  const shownFinishes = finishes.filter((colour) => shots[colour])
+  const gallery = shownFinishes.map((colour) => shots[colour])
   const cycle = (list) => (i) => (list.length ? list[i % list.length] : undefined)
   const pick = cycle(featureShots ?? gallery)
 
@@ -647,7 +659,7 @@ function sharedSpecBike({
         "Keyless entry & anti-theft",
         `${brakes.label} brakes`,
         rangeKm ? `Up to ${rangeKm} km range` : `${COMMON_SPECS.rangeBand} range`,
-        `Available in ${finishes.length} colours`,
+        `Available in ${shownFinishes.length} colours`,
       ],
     },
 
@@ -660,15 +672,17 @@ function sharedSpecBike({
     }),
 
     // Every catalogue finish, in catalogue order. `bg` is the configurator stage
-    // image, which falls back to the colour's own studio shot where there is no
-    // dedicated backdrop, and is left off entirely where there is neither —
-    // BookingPage then holds the first stage shot it does have.
-    colours: finishes.map((colour) => {
-      const bg = stageShots[colour] ?? shots[colour]
-      return { name: colour, hex: FINISHES[colour].hex, ...(bg ? { bg } : {}) }
-    }),
+    // image — the cut-out of that colour's studio shot, so the bike sits on the
+    // configurator's own grey rather than carrying a second backdrop into it.
+    // A finish we haven't shot has no cut-out and so no `bg`; BookingPage then
+    // holds the first stage image it does have.
+    colours: shownFinishes.map((colour) => ({
+      name: colour,
+      hex: FINISHES[colour].hex,
+      bg: cutout(shots[colour]),
+    })),
 
-    variants: shotFinishes.map((colour) => ({
+    variants: shownFinishes.map((colour) => ({
       id: `${slug}-${slugify(colour)}`,
       colour,
       accent: FINISHES[colour].accent,
@@ -709,7 +723,7 @@ function sharedSpecBike({
       fastCharge,
       brakes,
       wheelSize,
-      finishes,
+      finishes: shownFinishes,
     }),
 
     ...(headline
@@ -751,11 +765,6 @@ export const BIKES = {
       "Red / Mehrun": "/Home-page/red_thunder_scooty.png",
       Blue: "/Home-page/blue_thunder_scooty.png",
       "Gray / Silver": "/Home-page/grey_thunder_scooty.png",
-    },
-    // Dedicated configurator backdrops — a wider crop than the carousel shots.
-    stageShots: {
-      "Red / Mehrun": "/explore-pages/thunder_purchase_bg.png",
-      Blue: "/explore-pages/thunder_blue_bg.png",
     },
     featureShots: [
       "/explore-pages/thunder_performance_category.png",
